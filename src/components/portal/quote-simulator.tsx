@@ -10,6 +10,19 @@ interface QuoteSimulatorProps {
 type StructureType = "independant" | "tpe" | "pme" | "creation";
 type TurnoverRange = "low" | "medium" | "high";
 
+const STRUCTURE_LABELS: Record<StructureType, string> = {
+  independant: "Indépendant",
+  tpe: "TPE / Startup",
+  pme: "PME en expansion",
+  creation: "Nouvelle Création",
+};
+
+const TURNOVER_LABELS: Record<TurnoverRange, string> = {
+  low: "< 5 Millions FCFA / mois",
+  medium: "5 à 20 Millions FCFA / mois",
+  high: "> 20 Millions FCFA / mois",
+};
+
 export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
   const [structureType, setStructureType] = useState<StructureType>("tpe");
   const [turnoverRange, setTurnoverRange] = useState<TurnoverRange>("medium");
@@ -24,6 +37,8 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
   const [clientPhone, setClientPhone] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const calculation = useMemo(() => {
     let baseAccounting = 0;
@@ -76,11 +91,66 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
     };
   }, [structureType, turnoverRange, employeeCount, includeAccounting, includeFiscal, includePayroll, includeCreation]);
 
-  const handleSubmitQuote = (e: React.FormEvent) => {
+  const handleSubmitQuote = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientName || !clientPhone) return;
-    const randomRef = `AS-DEV-${Math.floor(1000 + Math.random() * 9000)}`;
-    setSubmittedRef(randomRef);
+    if (!clientName || !clientPhone || !clientEmail) return;
+
+    const nameParts = clientName.trim().split(/\s+/);
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(" ") || nameParts[0];
+
+    const selectedModules = [
+      includeAccounting ? "Tenue de Comptabilité & Bilan" : null,
+      includeFiscal ? "Démarches & Déclarations Fiscales" : null,
+      includePayroll ? "Gestion Sociale & Bulletins de Paie" : null,
+      includeCreation ? "Pack Création d'Entreprise" : null,
+    ].filter((m): m is string => Boolean(m));
+
+    const message = [
+      `Demande de devis via simulateur en ligne.`,
+      `Type de structure : ${STRUCTURE_LABELS[structureType]}.`,
+      `CA mensuel estimé : ${TURNOVER_LABELS[turnoverRange]}.`,
+      `Employés à gérer : ${employeeCount}.`,
+      `Prestations souhaitées : ${selectedModules.join(", ") || "—"}.`,
+      `Forfait mensuel estimé : ${formatFcfa(calculation.totalMonthly)}/mois.`,
+      includeCreation
+        ? `Frais de création uniques : ${formatFcfa(calculation.creationOneTime)}.`
+        : null,
+      `Estimation totale : ${formatFcfa(calculation.totalEstimatedInitial)}.`,
+    ]
+      .filter((line): line is string => Boolean(line))
+      .join("\n");
+
+    setPending(true);
+    setErrorMsg(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          company: clientName,
+          phone: clientPhone,
+          email: clientEmail,
+          service: `Devis - ${STRUCTURE_LABELS[structureType]}`,
+          message,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setErrorMsg(json?.error ?? "Une erreur est survenue, veuillez réessayer.");
+        setPending(false);
+        return;
+      }
+      setSubmittedRef(
+        `AS-DEV-${String(json.id ?? "CONFIRMED").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 6)}`
+      );
+    } catch {
+      setErrorMsg("Impossible d'envoyer votre demande de devis. Réessayez dans un instant.");
+    } finally {
+      setPending(false);
+    }
   };
 
   const formatFcfa = (val: number) => {
@@ -388,18 +458,26 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
 
                 <input
                   type="email"
-                  placeholder="Adresse Email (optionnel)"
+                  required
+                  placeholder="Adresse Email *"
                   value={clientEmail}
                   onChange={(e) => setClientEmail(e.target.value)}
                   className="w-full rounded-xl border border-emerald-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:border-amber-400 focus:outline-none"
                 />
 
+                {errorMsg && (
+                  <p className="rounded-xl border border-red-400/40 bg-red-500/20 px-3 py-2 text-[11px] font-semibold text-red-300">
+                    {errorMsg}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-xs font-bold text-slate-950 shadow-lg transition-colors hover:bg-amber-600"
+                  disabled={pending}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-xs font-bold text-slate-950 shadow-lg transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Send className="h-4 w-4" />
-                  <span>Envoyer ma demande de devis</span>
+                  <span>{pending ? "Envoi en cours..." : "Envoyer ma demande de devis"}</span>
                 </button>
               </form>
             )}

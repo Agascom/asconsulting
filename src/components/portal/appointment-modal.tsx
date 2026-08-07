@@ -54,7 +54,7 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
         setPending(false);
         return;
       }
-      const ref = `AS-RDV-${Math.floor(100000 + Math.random() * 900000)}`;
+      const ref = `AS-RDV-${String(json.id ?? "CONFIRMED").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 6)}`;
       setConfirmedRef(ref);
     } catch {
       setErrorMsg("Impossible d'envoyer votre demande. Réessayez dans un instant.");

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { PageTab } from "@/lib/portal-data";
 import { CORE_SERVICES, LEGAL_FORMS, FREQUENT_FAQS } from "@/lib/portal-data";
-import { Search, X, ArrowRight } from "lucide-react";
+import { Search, X, ArrowRight, FileText } from "lucide-react";
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -11,14 +12,69 @@ interface GlobalSearchModalProps {
   onNavigate: (tab: PageTab) => void;
 }
 
+interface DbService {
+  slug: string;
+  title: string;
+  shortDesc: string;
+}
+
+interface DbPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  createdAt?: string;
+}
+
 export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchModalProps) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
+  const [services, setServices] = useState<DbService[]>([]);
+  const [posts, setPosts] = useState<DbPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    Promise.all([
+      fetch("/api/public/services").then((r) => (r.ok ? r.json() : Promise.reject())),
+      fetch("/api/public/posts").then((r) => (r.ok ? r.json() : Promise.reject())),
+    ])
+      .then(([svc, psts]: [DbService[], DbPost[]]) => {
+        if (cancelled) return;
+        setServices(svc);
+        setPosts(psts);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLoadError(true);
+          setLoaded(true);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const normalizedQuery = query.toLowerCase().trim();
+  const showLoading = !loaded && !loadError && normalizedQuery !== "";
 
-  const matchingServices = CORE_SERVICES.filter(
+  const matchingServices = services.filter(
+    (s) =>
+      s.title.toLowerCase().includes(normalizedQuery) ||
+      s.shortDesc.toLowerCase().includes(normalizedQuery)
+  );
+
+  const matchingPosts = posts.filter(
+    (p) =>
+      p.title.toLowerCase().includes(normalizedQuery) ||
+      p.excerpt.toLowerCase().includes(normalizedQuery)
+  );
+
+  const matchingPortalServices = CORE_SERVICES.filter(
     (s) =>
       s.title.toLowerCase().includes(normalizedQuery) ||
       s.shortDesc.toLowerCase().includes(normalizedQuery)
@@ -36,9 +92,21 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
       faq.a.toLowerCase().includes(normalizedQuery)
   );
 
+  const hasAnyMatch =
+    matchingServices.length > 0 ||
+    matchingPosts.length > 0 ||
+    matchingPortalServices.length > 0 ||
+    matchingForms.length > 0 ||
+    matchingFaqs.length > 0;
+
   const handleSelectTab = (tab: PageTab) => {
     onNavigate(tab);
     onClose();
+  };
+
+  const handleSelectRoute = (href: string) => {
+    onClose();
+    router.push(href);
   };
 
   return (
@@ -50,7 +118,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
           <input
             type="text"
             autoFocus
-            placeholder="Rechercher une expertise, un statut (SARL, NIF), la localisation..."
+            placeholder="Rechercher un service, un article d'actualité, un statut (SARL, NIF)..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-transparent text-sm text-white placeholder-slate-400 focus:outline-none"
@@ -89,9 +157,13 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
                 ))}
               </div>
             </div>
+          ) : showLoading ? (
+            <p className="py-8 text-center text-xs text-slate-500">
+              Recherche des services et actualités en cours...
+            </p>
           ) : (
             <div className="space-y-6">
-              {/* Services matches */}
+              {/* Services matches (pages réelles) */}
               {matchingServices.length > 0 && (
                 <div className="space-y-2">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800">
@@ -99,6 +171,30 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
                   </h4>
                   <div className="space-y-2">
                     {matchingServices.map((s) => (
+                      <button
+                        key={s.slug}
+                        onClick={() => handleSelectRoute(`/services/${s.slug}`)}
+                        className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-3 text-left hover:bg-emerald-50"
+                      >
+                        <div>
+                          <div className="text-xs font-bold text-slate-900">{s.title}</div>
+                          <div className="line-clamp-1 text-[11px] text-slate-500">{s.shortDesc}</div>
+                        </div>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-emerald-700" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Fallback portal services si l'API n'a pas pu charger */}
+              {loadError && matchingPortalServices.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                    Prestations de Service
+                  </h4>
+                  <div className="space-y-2">
+                    {matchingPortalServices.map((s) => (
                       <div
                         key={s.id}
                         onClick={() => handleSelectTab("services")}
@@ -110,6 +206,33 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
                         </div>
                         <ArrowRight className="h-4 w-4 shrink-0 text-emerald-700" />
                       </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Actualités matches (pages réelles) */}
+              {matchingPosts.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                    Actualités & Publications
+                  </h4>
+                  <div className="space-y-2">
+                    {matchingPosts.map((p) => (
+                      <button
+                        key={p.slug}
+                        onClick={() => handleSelectRoute(`/actualites/${p.slug}`)}
+                        className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-left hover:bg-emerald-50"
+                      >
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-950 text-amber-300">
+                          <FileText className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="truncate text-xs font-bold text-slate-900">{p.title}</div>
+                          <div className="line-clamp-1 text-[11px] text-slate-500">{p.excerpt}</div>
+                        </div>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-emerald-700" />
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -162,19 +285,17 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
                 </div>
               )}
 
-              {matchingServices.length === 0 &&
-                matchingForms.length === 0 &&
-                matchingFaqs.length === 0 && (
-                  <div className="space-y-2 py-8 text-center text-xs text-slate-500">
-                    <p>Aucun résultat direct pour "{query}".</p>
-                    <button
-                      onClick={() => handleSelectTab("contact")}
-                      className="rounded-lg bg-emerald-950 px-4 py-2 text-xs font-bold text-amber-300"
-                    >
-                      Contactez directement le cabinet
-                    </button>
-                  </div>
-                )}
+              {!hasAnyMatch && (
+                <div className="space-y-2 py-8 text-center text-xs text-slate-500">
+                  <p>Aucun résultat direct pour "{query}".</p>
+                  <button
+                    onClick={() => handleSelectTab("contact")}
+                    className="rounded-lg bg-emerald-950 px-4 py-2 text-xs font-bold text-amber-300"
+                  >
+                    Contactez directement le cabinet
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

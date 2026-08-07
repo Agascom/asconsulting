@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   UserCheck,
   UploadCloud,
@@ -9,6 +10,7 @@ import {
   CheckCircle2,
   Clock,
   FileText,
+  ArrowRight,
 } from "lucide-react";
 
 type ActiveTab = "upload" | "documents" | "status";
@@ -62,6 +64,21 @@ export function ClientSpaceDemo() {
             Transmettez vos pièces comptables, téléchargez vos attestations fiscales et suivez
             l'avancement de vos dossiers 24h/24.
           </p>
+
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-5 py-2.5 text-xs font-bold text-slate-950 shadow transition-colors hover:bg-amber-400"
+            >
+              Explorer nos Services <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/actualites"
+              className="inline-flex items-center gap-2 rounded-xl border border-emerald-700 bg-emerald-900/60 px-5 py-2.5 text-xs font-bold text-amber-300 transition-colors hover:bg-emerald-800"
+            >
+              Consulter nos Actualités <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
 
         {/* Portal Dashboard Card */}
@@ -193,7 +210,7 @@ export function ClientSpaceDemo() {
                     handleSimulatedUpload("Factures_Deposees_Client.pdf");
                   }}
                   onClick={() =>
-                    handleSimulatedUpload(`Nouveau_Document_Depot_${Math.floor(Math.random() * 100)}.pdf`)
+                    handleSimulatedUpload(`Nouveau_Document_Depot_${uploadedFiles.length + 1}.pdf`)
                   }
                   className={`cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-colors ${
                     dragActive
