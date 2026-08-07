@@ -25,14 +25,32 @@ const EXPERTISE_LINKS = [
 export function Footer() {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+  const [newsletterError, setNewsletterError] = useState(false);
+  const [newsletterPending, setNewsletterPending] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
 
-  const handleNewsletter = (e: React.FormEvent) => {
+  const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newsletterEmail) {
+    if (!newsletterEmail) return;
+    setNewsletterPending(true);
+    setNewsletterError(false);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+      if (!res.ok) {
+        setNewsletterError(true);
+        return;
+      }
       setNewsletterSubscribed(true);
       setTimeout(() => setNewsletterSubscribed(false), 4000);
       setNewsletterEmail("");
+    } catch {
+      setNewsletterError(true);
+    } finally {
+      setNewsletterPending(false);
     }
   };
 
@@ -152,7 +170,8 @@ export function Footer() {
                 />
                 <button
                   type="submit"
-                  className="rounded-lg bg-amber-500 px-3 py-2 text-xs font-bold text-slate-950 transition-colors hover:bg-amber-600"
+                  disabled={newsletterPending}
+                  className="rounded-lg bg-amber-500 px-3 py-2 text-xs font-bold text-slate-950 transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
                   aria-label="S'inscrire à la newsletter"
                 >
                   <Send className="h-3.5 w-3.5" />
@@ -161,6 +180,11 @@ export function Footer() {
               {newsletterSubscribed && (
                 <p className="text-[11px] font-bold text-amber-300">
                   Inscription enregistrée avec succès !
+                </p>
+              )}
+              {newsletterError && (
+                <p className="text-[11px] font-bold text-red-400">
+                  Erreur lors de l'inscription, réessayez.
                 </p>
               )}
             </form>

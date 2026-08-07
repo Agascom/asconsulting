@@ -10,7 +10,9 @@ interface AppointmentModalProps {
 }
 
 export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [serviceCategory, setServiceCategory] = useState(CORE_SERVICES[0].title);
@@ -19,22 +21,57 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
   const [notes, setNotes] = useState("");
 
   const [confirmedRef, setConfirmedRef] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !phone) return;
-    const ref = `AS-RDV-${Math.floor(100000 + Math.random() * 900000)}`;
-    setConfirmedRef(ref);
+    if (!firstName || !lastName || !email || !phone) return;
+    setPending(true);
+    setErrorMsg(null);
+    try {
+      const message = `RDV souhaité le ${preferredDate || "dès que possible"} à ${preferredTime}. Domaine : ${serviceCategory}. ${
+        notes ? `\nDétail : ${notes}` : ""
+      }`;
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          company: companyName,
+          phone,
+          email,
+          service: `RDV - ${serviceCategory}`,
+          message,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setErrorMsg(json?.error ?? "Une erreur est survenue, veuillez réessayer.");
+        setPending(false);
+        return;
+      }
+      const ref = `AS-RDV-${Math.floor(100000 + Math.random() * 900000)}`;
+      setConfirmedRef(ref);
+    } catch {
+      setErrorMsg("Impossible d'envoyer votre demande. Réessayez dans un instant.");
+    } finally {
+      setPending(false);
+    }
   };
 
   const resetAndClose = () => {
     setConfirmedRef(null);
-    setFullName("");
+    setFirstName("");
+    setLastName("");
+    setEmail("");
     setPhone("");
     setCompanyName("");
     setNotes("");
+    setErrorMsg(null);
     onClose();
   };
 
@@ -81,7 +118,7 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
 
               <div className="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-3 text-left text-xs text-slate-700">
                 <p>
-                  <strong>Nom :</strong> {fullName}
+                  <strong>Nom :</strong> {firstName} {lastName}
                 </p>
                 <p>
                   <strong>Service :</strong> {serviceCategory}
@@ -108,14 +145,44 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-[11px] font-bold uppercase text-slate-700">
-                    Nom & Prénom *
+                    Prénom *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="M. Ondo Marc"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Marc"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:border-emerald-800 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-[11px] font-bold uppercase text-slate-700">
+                    Nom *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ondo"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:border-emerald-800 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-[11px] font-bold uppercase text-slate-700">
+                    Adresse E-mail *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="marc.ondo@exemple.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:border-emerald-800 focus:outline-none"
                   />
                 </div>
@@ -134,6 +201,12 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
                   />
                 </div>
               </div>
+
+              {errorMsg && (
+                <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
+                  {errorMsg}
+                </p>
+              )}
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
@@ -214,10 +287,11 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
 
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-xs font-bold text-slate-950 shadow-md transition-colors hover:bg-amber-600"
+                disabled={pending}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-xs font-bold text-slate-950 shadow-md transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Send className="h-4 w-4" />
-                <span>Valider le Rendez-vous</span>
+                <span>{pending ? "Envoi en cours..." : "Valider le Rendez-vous"}</span>
               </button>
             </form>
           )}
