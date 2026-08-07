@@ -24,12 +24,11 @@ import {
 const NAV_ITEMS = [
   { id: "home", label: "Accueil", href: "/" },
   { id: "about", label: "À propos", href: "/#a-propos" },
-  { id: "services", label: "Nos Expertises", href: "/#services" },
-  { id: "creation", label: "Création d'Entreprise", href: "/#creation" },
-  { id: "simulator", label: "Simulateur Devis", href: "/#simulator" },
-  { id: "location", label: "Localisation", href: "/#location" },
-  { id: "resources", label: "Guides & Fiscalité", href: "/#resources" },
-  { id: "client-space", label: "Espace Client", href: "/#espace-client" },
+  { id: "services", label: "Nos Expertises", href: "/services" },
+  { id: "creation", label: "Création d'Entreprise", href: "/creation-entreprise" },
+  { id: "simulator", label: "Simulateur Devis", href: "/simulateur-devis" },
+  { id: "resources", label: "Guides & Fiscalité", href: "/guides-fiscaux" },
+  { id: "client-space", label: "Espace Client", href: "/espace-client" },
   { id: "contact", label: "Contact", href: "/contact" },
 ];
 
@@ -80,7 +79,7 @@ export function Header() {
             </div>
 
             <Link
-              href="/#espace-client"
+              href="/espace-client"
               className="inline-flex items-center gap-1.5 rounded border border-emerald-700 bg-emerald-800 px-2.5 py-1 text-xs font-medium text-amber-300 transition-colors hover:bg-emerald-700"
             >
               <UserCheck className="h-3.5 w-3.5" />
@@ -94,12 +93,12 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="group flex cursor-pointer items-center gap-3">
-          <div className="relative h-11 w-11 shrink-0 overflow-hidden transition-transform group-hover:scale-105">
+          <div className="relative h-16 w-16 shrink-0 overflow-hidden transition-transform group-hover:scale-105">
             <Image
               src="/images/logo.png"
               alt="Logo A&S CONSULTING"
               fill
-              sizes="44px"
+              sizes="64px"
               className="object-contain"
               priority
             />
@@ -118,12 +117,12 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-1.5 xl:flex">
+        <nav className="hidden items-center gap-1 xl:flex">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.id}
               href={item.href}
-              className={`whitespace-nowrap rounded-md px-3 py-2 text-xs font-semibold transition-all ${
+              className={`whitespace-nowrap rounded-md px-2.5 py-2 text-xs font-semibold transition-all ${
                 isActive(item.href)
                   ? "bg-emerald-900 text-amber-300 shadow-sm"
                   : "text-slate-700 hover:bg-emerald-50 hover:text-emerald-900"

@@ -259,7 +259,7 @@ export function Icon({
   );
 }
 
-export function Logo({ className = "h-9 w-9" }: { className?: string }) {
+export function Logo({ className = "h-12 w-12" }: { className?: string }) {
   return (
     <div className={`relative ${className}`}>
       <Image

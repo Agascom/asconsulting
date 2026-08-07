@@ -13,33 +13,23 @@ interface PortalUiContextValue {
 
 const PortalUiContext = createContext<PortalUiContextValue | null>(null);
 
-const SECTION_IDS: Partial<Record<PageTab, string>> = {
-  about: "a-propos",
-  services: "services",
-  creation: "creation",
-  simulator: "simulator",
-  location: "location",
-  resources: "resources",
-  "client-space": "espace-client",
+const TAB_ROUTES: Record<PageTab, string> = {
+  home: "/",
+  about: "/#a-propos",
+  services: "/services",
+  creation: "/creation-entreprise",
+  simulator: "/simulateur-devis",
+  location: "/contact",
+  resources: "/guides-fiscaux",
+  "client-space": "/espace-client",
+  contact: "/contact",
 };
 
 export function usePortalNavigation() {
   const router = useRouter();
   return useCallback(
     (tab: PageTab) => {
-      if (tab === "contact") {
-        router.push("/contact");
-        return;
-      }
-      const id = SECTION_IDS[tab];
-      if (id) {
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-          return;
-        }
-      }
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      router.push(TAB_ROUTES[tab] ?? "/");
     },
     [router]
   );

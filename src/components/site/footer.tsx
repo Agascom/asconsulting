@@ -9,10 +9,12 @@ import { Phone, Mail, MapPin, Clock, Send, ArrowUp } from "lucide-react";
 const NAV_LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/#a-propos", label: "À propos du Cabinet" },
-  { href: "/#services", label: "Nos Expertises" },
-  { href: "/#creation", label: "Création d'Entreprise" },
-  { href: "/#simulator", label: "Simulateur Devis" },
-  { href: "/#location", label: "Localisation & Accès" },
+  { href: "/services", label: "Nos Expertises" },
+  { href: "/creation-entreprise", label: "Création d'Entreprise" },
+  { href: "/simulateur-devis", label: "Simulateur Devis" },
+  { href: "/guides-fiscaux", label: "Guides & Fiscalité" },
+  { href: "/espace-client", label: "Espace Client" },
+  { href: "/contact", label: "Localisation & Contact" },
 ];
 
 const EXPERTISE_LINKS = [
@@ -67,12 +69,12 @@ export function Footer() {
           {/* Col 1: Brand & Description (4 cols) */}
           <div className="space-y-4 lg:col-span-4">
             <Link href="/" className="group flex w-fit cursor-pointer items-center gap-3">
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden transition-transform group-hover:scale-105">
+              <div className="relative h-20 w-20 shrink-0 overflow-hidden transition-transform group-hover:scale-105">
                 <Image
                   src="/images/logo.png"
                   alt="Logo A&S CONSULTING"
                   fill
-                  sizes="48px"
+                  sizes="80px"
                   className="object-contain"
                 />
               </div>
