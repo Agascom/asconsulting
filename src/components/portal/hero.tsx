@@ -33,8 +33,8 @@ interface Slide {
   secondaryAction: SlideAction;
 }
 
-const heroImage1 = "/images/as-consulting-hero.jpg";
-const heroImage2 = "/images/as-consulting-office.jpg";
+const heroImage1 = "/images/welcom.jpeg";
+const heroImage2 = "/images/equipe.jpeg";
 
 export function Hero({ onNavigate, onOpenAppointment }: HeroProps) {
   const [currentSlide, setCurrentSlide] = useState(0);

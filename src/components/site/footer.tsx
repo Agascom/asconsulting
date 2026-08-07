@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { COMPANY_INFO } from "@/lib/portal-data";
 import { Phone, Mail, MapPin, Clock, Send, ArrowUp } from "lucide-react";
 
@@ -66,8 +67,14 @@ export function Footer() {
           {/* Col 1: Brand & Description (4 cols) */}
           <div className="space-y-4 lg:col-span-4">
             <Link href="/" className="group flex w-fit cursor-pointer items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 font-serif text-xl font-bold text-slate-950 shadow-lg">
-                A&S
+              <div className="relative h-12 w-12 shrink-0 overflow-hidden transition-transform group-hover:scale-105">
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo A&S CONSULTING"
+                  fill
+                  sizes="48px"
+                  className="object-contain"
+                />
               </div>
               <div>
                 <span className="font-serif text-xl font-bold tracking-tight text-white transition-colors group-hover:text-amber-300">

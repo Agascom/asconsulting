@@ -10,7 +10,7 @@ interface AboutSectionProps {
   onOpenAppointment: () => void;
 }
 
-const officeImg = "/images/as-consulting-office.jpg";
+const officeImg = "/images/nous.jpeg";
 
 export function AboutSection({ onNavigate, onOpenAppointment }: AboutSectionProps) {
   const corePillars = [

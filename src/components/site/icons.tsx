@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export type IconName =
   | "calculator"
   | "file"
@@ -259,23 +261,15 @@ export function Icon({
 
 export function Logo({ className = "h-9 w-9" }: { className?: string }) {
   return (
-    <div className={`${className} grid place-items-center rounded-lg bg-gradient-to-br from-brand-800 to-brand-950 text-gold-400`}>
-      <svg viewBox="0 0 24 24" fill="none" className="h-[62%] w-[62%]" aria-hidden="true">
-        <path
-          d="M6 3h12a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"
-          fill="currentColor"
-        />
-        <path
-          d="M4 11h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"
-          fill="currentColor"
-          opacity="0.7"
-        />
-        <path
-          d="M7 19h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"
-          fill="currentColor"
-          opacity="0.45"
-        />
-      </svg>
+    <div className={`relative ${className}`}>
+      <Image
+        src="/images/logo.png"
+        alt="Logo A&S CONSULTING"
+        fill
+        sizes="128px"
+        className="object-contain"
+        priority
+      />
     </div>
   );
 }

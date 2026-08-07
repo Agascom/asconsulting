@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { COMPANY_INFO } from "@/lib/portal-data";
@@ -93,8 +94,15 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="group flex cursor-pointer items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-emerald-700 bg-gradient-to-br from-emerald-900 to-slate-900 font-serif text-xl font-bold text-amber-400 shadow-md transition-transform group-hover:scale-105">
-            A&S
+          <div className="relative h-11 w-11 shrink-0 overflow-hidden transition-transform group-hover:scale-105">
+            <Image
+              src="/images/logo.png"
+              alt="Logo A&S CONSULTING"
+              fill
+              sizes="44px"
+              className="object-contain"
+              priority
+            />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
