@@ -4,30 +4,53 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Primaire : vert forêt (confiance, finance, sobriété) */
-  --color-brand-50: #eef7f1;
-  --color-brand-100: #d8eddf;
-  --color-brand-200: #b3dbc2;
-  --color-brand-300: #86c19c;
-  --color-brand-400: #55a174;
-  --color-brand-500: #32875a;
-  --color-brand-600: #256c49;
-  --color-brand-700: #1f563a;
-  --color-brand-800: #1e4631;
-  --color-brand-900: #0e301f;
-  --color-brand-950: #072016;
+  /* Primaire : vert émeraude (confiance, finance, sobriété) */
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+  --color-brand-950: #022c22;
 
-  /* Accent — bleu (appel à l'action, liens, highlights) */
-  --color-gold-50: #eef4fb;
-  --color-gold-100: #dbe7f6;
-  --color-gold-200: #bfd4ef;
-  --color-gold-300: #93b7e2;
-  --color-gold-400: #5f94d1;
-  --color-gold-500: #3a75bd;
-  --color-gold-600: #2a5da3;
-  --color-gold-700: #244c84;
-  --color-gold-800: #22406e;
-  --color-gold-900: #20365c;
+  /* Accent — ambre (appel à l'action, liens, highlights) */
+  --color-gold-50: #fffbeb;
+  --color-gold-100: #fef3c7;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  --color-gold-800: #92400e;
+  --color-gold-900: #78350f;
+
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-scale-up: scale-up 0.25s ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scale-up {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
 
 :root {
@@ -35,7 +58,15 @@
   --foreground: #171717;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+[id] {
+  scroll-margin-top: 96px;
 }

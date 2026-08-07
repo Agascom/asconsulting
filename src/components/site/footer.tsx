@@ -1,59 +1,92 @@
-import Link from "next/link";
-import type { SiteSettings } from "@/lib/site-shared";
-import { whatsappLink } from "@/lib/site-shared";
-import { Icon, Logo } from "@/components/site/icons";
+"use client";
 
-const SERVICE_LINKS = [
-  { href: "/services/tenue-de-comptabilite", label: "Tenue de comptabilité" },
-  { href: "/services/demarches-administratives-et-fiscales", label: "Démarches administratives et fiscales" },
-  { href: "/services/gestion-sociale", label: "Gestion sociale" },
-  { href: "/services/creation-d-entreprise", label: "Création d'entreprise" },
+import { useState } from "react";
+import Link from "next/link";
+import { COMPANY_INFO } from "@/lib/portal-data";
+import { Phone, Mail, MapPin, Clock, Send, ArrowUp } from "lucide-react";
+
+const NAV_LINKS = [
+  { href: "/", label: "Accueil" },
+  { href: "/#a-propos", label: "À propos du Cabinet" },
+  { href: "/#services", label: "Nos Expertises" },
+  { href: "/#creation", label: "Création d'Entreprise" },
+  { href: "/#simulator", label: "Simulateur Devis" },
+  { href: "/#location", label: "Localisation & Accès" },
 ];
 
-export function Footer({ settings }: { settings: SiteSettings }) {
-  const wa = whatsappLink(settings.whatsapp);
+const EXPERTISE_LINKS = [
+  "Tenue de comptabilité SYSCOHADA",
+  "Déclarations d'impôts & Quitus fiscal",
+  "Gestion sociale, Paie & CNSS",
+  "Immatriculation RCCM & NIF",
+  "Assistance aux contrôles fiscaux",
+];
+
+export function Footer() {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
+
+  const handleNewsletter = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newsletterEmail) {
+      setNewsletterSubscribed(true);
+      setTimeout(() => setNewsletterSubscribed(false), 4000);
+      setNewsletterEmail("");
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <footer className="bg-brand-950 text-brand-100">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <div className="flex items-center gap-3">
-              <Logo />
-              <span className="text-lg font-bold text-white">A&S Consulting</span>
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-brand-200">
-              Cabinet de gestion comptable, fiscale, sociale et administrative.
-              Nous accompagnons les entreprises et les porteurs de projets à
-              Libreville et dans toute la sous-région.
+    <footer className="relative border-t border-emerald-900 bg-emerald-950 text-white">
+      {/* Main Footer Grid */}
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12">
+          {/* Col 1: Brand & Description (4 cols) */}
+          <div className="space-y-4 lg:col-span-4">
+            <Link href="/" className="group flex w-fit cursor-pointer items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 font-serif text-xl font-bold text-slate-950 shadow-lg">
+                A&S
+              </div>
+              <div>
+                <span className="font-serif text-xl font-bold tracking-tight text-white transition-colors group-hover:text-amber-300">
+                  A&S CONSULTING
+                </span>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-300">
+                  Cabinet de Services Professionnels
+                </p>
+              </div>
+            </Link>
+
+            <p className="text-xs leading-relaxed text-slate-300">
+              Cabinet spécialisé dans la gestion comptable, les démarches administratives, fiscales
+              et sociales, et l'accompagnement à la création d'entreprise pour PME, startups et
+              indépendants.
             </p>
-            <a
-              href="https://www.facebook.com/profile.php?id=100087006793876"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Page Facebook"
-              className="mt-5 inline-flex h-10 w-10 items-center justify-center rounded-md bg-white/10 text-white transition-colors hover:bg-gold-500 hover:text-brand-950"
-            >
-              <Icon name="facebook" className="h-5 w-5" />
-            </a>
+
+            <div className="space-y-1 rounded-xl border border-emerald-800 bg-emerald-900/80 p-3 text-xs text-slate-200">
+              <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                <MapPin className="h-4 w-4 shrink-0 text-amber-400" />
+                <span>Emplacement Cabinet</span>
+              </div>
+              <p className="text-[11px] text-slate-300">
+                {COMPANY_INFO.addressLine1} ({COMPANY_INFO.addressLine2}).
+              </p>
+            </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+          {/* Col 2: Quick Links (2 cols) */}
+          <div className="space-y-3 lg:col-span-2">
+            <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-amber-300">
               Navigation
-            </h3>
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {[
-                { href: "/", label: "Accueil" },
-                { href: "/a-propos", label: "Le Cabinet" },
-                { href: "/services", label: "Nos services" },
-                { href: "/pourquoi-nous", label: "Pourquoi nous choisir" },
-                { href: "/actualites", label: "Actualités" },
-                { href: "/faq", label: "FAQ" },
-                { href: "/contact", label: "Contact" },
-              ].map((l) => (
+            </h4>
+            <ul className="space-y-2 text-xs text-slate-300">
+              {NAV_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-brand-200 transition-colors hover:text-gold-300">
+                  <Link href={l.href} className="transition-colors hover:text-amber-300">
                     {l.label}
                   </Link>
                 </li>
@@ -61,79 +94,146 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Nos services
-            </h3>
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {SERVICE_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-brand-200 transition-colors hover:text-gold-300">
-                    {l.label}
-                  </Link>
+          {/* Col 3: Core Expertise (3 cols) */}
+          <div className="space-y-3 lg:col-span-3">
+            <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-amber-300">
+              Domaines d'Expertise
+            </h4>
+            <ul className="space-y-2 text-xs text-slate-300">
+              {EXPERTISE_LINKS.map((item) => (
+                <li key={item} className="flex items-center gap-1.5">
+                  <span className="font-bold text-amber-400">•</span>
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Contact
-            </h3>
-            <ul className="mt-4 space-y-3 text-sm text-brand-200">
-              <li className="flex items-start gap-3">
-                <Icon name="mapPin" className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-                {settings.address}
-              </li>
-              <li className="flex items-center gap-3">
-                <Icon name="phone" className="h-4 w-4 shrink-0 text-gold-400" />
-                <a href={`tel:${settings.phone.replace(/\s/g, "")}`} className="hover:text-gold-300">
-                  {settings.phone}
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Icon name="mail" className="h-4 w-4 shrink-0 text-gold-400" />
-                <a href={`mailto:${settings.email}`} className="hover:text-gold-300">
-                  {settings.email}
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <Icon name="clock" className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-                {settings.hours}
-              </li>
-              {settings.whatsapp && (
-                <li>
-                  <a
-                    href={wa}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-3 py-2 font-medium text-white hover:bg-[#1fb355]"
-                  >
-                    <Icon name="whatsapp" className="h-4 w-4" />
-                    Discuter sur WhatsApp
-                  </a>
-                </li>
+          {/* Col 4: Contact & Newsletter (3 cols) */}
+          <div className="space-y-4 lg:col-span-3">
+            <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-amber-300">
+              Contact & Inscription
+            </h4>
+
+            <div className="space-y-2 text-xs text-slate-300">
+              <a
+                href={`tel:${COMPANY_INFO.phonePrimary.replace(/\s/g, "")}`}
+                className="flex items-center gap-2 transition-colors hover:text-amber-300"
+              >
+                <Phone className="h-4 w-4 shrink-0 text-amber-400" />
+                <span>{COMPANY_INFO.phonePrimary}</span>
+              </a>
+              <a
+                href={`mailto:${COMPANY_INFO.email}`}
+                className="flex items-center gap-2 transition-colors hover:text-amber-300"
+              >
+                <Mail className="h-4 w-4 shrink-0 text-amber-400" />
+                <span>{COMPANY_INFO.email}</span>
+              </a>
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 shrink-0 text-amber-400" />
+                <span>{COMPANY_INFO.workingHours}</span>
+              </div>
+            </div>
+
+            {/* Newsletter */}
+            <form onSubmit={handleNewsletter} className="space-y-2 pt-2">
+              <span className="block text-[11px] font-bold uppercase text-slate-300">
+                Lettre d'Information Fiscale
+              </span>
+              <div className="flex gap-1.5">
+                <input
+                  type="email"
+                  required
+                  placeholder="Votre adresse email"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  className="w-full rounded-lg border border-emerald-800 bg-slate-900 px-3 py-2 text-xs text-white placeholder-slate-400 focus:border-amber-400 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="rounded-lg bg-amber-500 px-3 py-2 text-xs font-bold text-slate-950 transition-colors hover:bg-amber-600"
+                  aria-label="S'inscrire à la newsletter"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              {newsletterSubscribed && (
+                <p className="text-[11px] font-bold text-amber-300">
+                  Inscription enregistrée avec succès !
+                </p>
               )}
-            </ul>
+            </form>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-brand-300 sm:flex-row sm:px-6">
-          <p>
-            © {new Date().getFullYear()} A&S CONSULTING — Tous droits réservés.
-          </p>
-          <div className="flex items-center gap-5">
-            <Link href="/mentions-legales" className="hover:text-gold-300">
-              Mentions légales
-            </Link>
-            <Link href="/confidentialite" className="hover:text-gold-300">
-              Politique de confidentialité
-            </Link>
+      {/* Bottom Bar */}
+      <div className="border-t border-emerald-900 bg-emerald-950/80 py-4 text-xs text-slate-400">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          <p>© {new Date().getFullYear()} A&S CONSULTING. Tous droits réservés.</p>
+
+          <div className="flex items-center gap-4">
+            <button onClick={() => setShowLegalModal(true)} className="transition-colors hover:text-amber-300">
+              Mentions Légales & Confidentialité
+            </button>
+            <span>•</span>
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-1 rounded bg-emerald-900 p-1.5 text-amber-300 transition-colors hover:bg-emerald-800"
+            >
+              <ArrowUp className="h-3.5 w-3.5" /> Haut de page
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Legal Modal */}
+      {showLegalModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg space-y-4 rounded-2xl border border-slate-200 bg-white p-6 text-slate-900">
+            <div className="flex items-center justify-between border-b pb-3">
+              <h3 className="font-serif text-base font-bold text-slate-900">
+                Mentions Légales - A&S CONSULTING
+              </h3>
+              <button
+                onClick={() => setShowLegalModal(false)}
+                aria-label="Fermer"
+                className="text-slate-400 hover:text-slate-900"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="max-h-60 space-y-2 overflow-y-auto text-xs text-slate-600">
+              <p>
+                <strong>Éditeur du site :</strong> Cabinet A&S CONSULTING
+              </p>
+              <p>
+                <strong>Siège social :</strong> {COMPANY_INFO.addressLine1} ({COMPANY_INFO.addressLine2}).
+              </p>
+              <p>
+                <strong>Téléphone :</strong> {COMPANY_INFO.phonePrimary}
+              </p>
+              <p>
+                <strong>Email :</strong> {COMPANY_INFO.email}
+              </p>
+              <p>
+                <strong>Protection des Données :</strong> Les informations recueillies via nos
+                formulaires sont strictement destinées au traitement de vos demandes de devis et
+                rendez-vous. Elles ne sont jamais cédées à des tiers.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setShowLegalModal(false)}
+              className="w-full rounded-xl bg-emerald-950 py-2 text-xs font-bold text-amber-300"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }

@@ -1,0 +1,411 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { Sparkles, Send, Building2, Users, Receipt, Check } from "lucide-react";
+
+interface QuoteSimulatorProps {
+  onOpenAppointment: () => void;
+}
+
+type StructureType = "independant" | "tpe" | "pme" | "creation";
+type TurnoverRange = "low" | "medium" | "high";
+
+export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
+  const [structureType, setStructureType] = useState<StructureType>("tpe");
+  const [turnoverRange, setTurnoverRange] = useState<TurnoverRange>("medium");
+  const [employeeCount, setEmployeeCount] = useState<number>(3);
+
+  const [includeAccounting, setIncludeAccounting] = useState<boolean>(true);
+  const [includeFiscal, setIncludeFiscal] = useState<boolean>(true);
+  const [includePayroll, setIncludePayroll] = useState<boolean>(true);
+  const [includeCreation, setIncludeCreation] = useState<boolean>(false);
+
+  const [clientName, setClientName] = useState("");
+  const [clientPhone, setClientPhone] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [submittedRef, setSubmittedRef] = useState<string | null>(null);
+
+  const calculation = useMemo(() => {
+    let baseAccounting = 0;
+    let baseFiscal = 0;
+    let basePayroll = 0;
+    let creationFee = 0;
+
+    if (structureType === "independant") {
+      baseAccounting = 50000;
+      baseFiscal = 30000;
+    } else if (structureType === "tpe") {
+      baseAccounting = 100000;
+      baseFiscal = 50000;
+    } else if (structureType === "pme") {
+      baseAccounting = 200000;
+      baseFiscal = 90000;
+    } else if (structureType === "creation") {
+      baseAccounting = 75000;
+      baseFiscal = 40000;
+    }
+
+    if (turnoverRange === "medium") {
+      baseAccounting *= 1.25;
+      baseFiscal *= 1.2;
+    } else if (turnoverRange === "high") {
+      baseAccounting *= 1.6;
+      baseFiscal *= 1.5;
+    }
+
+    if (employeeCount > 0) {
+      basePayroll = 15000 + employeeCount * 12000;
+    }
+
+    if (includeCreation) {
+      creationFee = 250000;
+    }
+
+    const totalMonthly =
+      (includeAccounting ? baseAccounting : 0) +
+      (includeFiscal ? baseFiscal : 0) +
+      (includePayroll ? basePayroll : 0);
+
+    return {
+      monthlyAccounting: Math.round(baseAccounting),
+      monthlyFiscal: Math.round(baseFiscal),
+      monthlyPayroll: Math.round(basePayroll),
+      creationOneTime: creationFee,
+      totalMonthly: Math.round(totalMonthly),
+      totalEstimatedInitial: Math.round(totalMonthly + (includeCreation ? creationFee : 0)),
+    };
+  }, [structureType, turnoverRange, employeeCount, includeAccounting, includeFiscal, includePayroll, includeCreation]);
+
+  const handleSubmitQuote = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!clientName || !clientPhone) return;
+    const randomRef = `AS-DEV-${Math.floor(1000 + Math.random() * 9000)}`;
+    setSubmittedRef(randomRef);
+  };
+
+  const formatFcfa = (val: number) => {
+    return new Intl.NumberFormat("fr-FR").format(val) + " FCFA";
+  };
+
+  return (
+    <section id="simulator" className="border-b border-slate-200 bg-white py-16">
+      <div className="mx-auto max-w-7xl space-y-10 px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mx-auto max-w-3xl space-y-3 text-center">
+          <span className="inline-block rounded-full border border-emerald-200 bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-emerald-800">
+            Outil de Simulation en Ligne
+          </span>
+          <h2 className="font-serif text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            Simulateur de Devis & Forfait Gestion
+          </h2>
+          <p className="text-sm leading-relaxed text-slate-600 sm:text-base">
+            Estimez instantanément le tarif de votre accompagnement en tenue comptable,
+            déclarations fiscales, fiches de paie ou création d'entreprise.
+          </p>
+        </div>
+
+        {/* Simulator Workspace */}
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+          {/* Left Controls Form */}
+          <div className="space-y-6 rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm sm:p-8 lg:col-span-7">
+            {/* Step 1: Structure type */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
+                <Building2 className="h-4 w-4 text-emerald-700" /> 1. Type de Structure ou Projet
+              </label>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {[
+                  { id: "independant", label: "Indépendant" },
+                  { id: "tpe", label: "TPE / Startup" },
+                  { id: "pme", label: "PME en expansion" },
+                  { id: "creation", label: "Nouvelle Création" },
+                ].map((st) => (
+                  <button
+                    key={st.id}
+                    type="button"
+                    onClick={() => setStructureType(st.id as StructureType)}
+                    className={`rounded-xl border px-3 py-2.5 text-xs font-bold transition-all ${
+                      structureType === st.id
+                        ? "border-emerald-800 bg-emerald-900 text-amber-300 shadow-sm"
+                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+                    }`}
+                  >
+                    {st.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 2: Turnover estimation */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
+                <Receipt className="h-4 w-4 text-emerald-700" /> 2. Chiffre d'Affaires Mensuel Estimé
+              </label>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                {[
+                  { id: "low", label: "< 5 Millions FCFA / mois" },
+                  { id: "medium", label: "5 à 20 Millions FCFA / mois" },
+                  { id: "high", label: "> 20 Millions FCFA / mois" },
+                ].map((tr) => (
+                  <button
+                    key={tr.id}
+                    type="button"
+                    onClick={() => setTurnoverRange(tr.id as TurnoverRange)}
+                    className={`rounded-xl border px-3 py-2.5 text-xs font-medium transition-all ${
+                      turnoverRange === tr.id
+                        ? "border-emerald-800 bg-emerald-950 text-white"
+                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+                    }`}
+                  >
+                    {tr.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 3: Employee Count */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
+                  <Users className="h-4 w-4 text-emerald-700" /> 3. Nombre d'Employés à Gérer
+                </label>
+                <span className="rounded-full border border-emerald-200 bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-900">
+                  {employeeCount} Salarié(s)
+                </span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={30}
+                value={employeeCount}
+                onChange={(e) => setEmployeeCount(parseInt(e.target.value) || 0)}
+                className="w-full cursor-pointer accent-emerald-800"
+              />
+              <div className="flex justify-between text-[11px] text-slate-400">
+                <span>0 (Aucun salarié)</span>
+                <span>15 salariés</span>
+                <span>30+ salariés</span>
+              </div>
+            </div>
+
+            {/* Step 4: Included Modules */}
+            <div className="space-y-3 pt-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                4. Prestations à Inclure dans le Forfait
+              </label>
+
+              <div className="space-y-2">
+                <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-200 bg-white p-3 hover:border-emerald-300">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={includeAccounting}
+                      onChange={(e) => setIncludeAccounting(e.target.checked)}
+                      className="h-4 w-4 accent-emerald-800"
+                    />
+                    <div>
+                      <div className="text-xs font-bold text-slate-900">
+                        Tenue de Comptabilité & Bilan
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        Saisie, grand livre, balance et états financiers OHADA
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold text-emerald-900">
+                    ~{formatFcfa(calculation.monthlyAccounting)} /mois
+                  </span>
+                </label>
+
+                <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-200 bg-white p-3 hover:border-emerald-300">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={includeFiscal}
+                      onChange={(e) => setIncludeFiscal(e.target.checked)}
+                      className="h-4 w-4 accent-emerald-800"
+                    />
+                    <div>
+                      <div className="text-xs font-bold text-slate-900">
+                        Démarches & Déclarations Fiscales
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        TVA, CSS, IRPP, IS et suivi du Quitus Fiscal
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold text-emerald-900">
+                    ~{formatFcfa(calculation.monthlyFiscal)} /mois
+                  </span>
+                </label>
+
+                <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-200 bg-white p-3 hover:border-emerald-300">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={includePayroll}
+                      onChange={(e) => setIncludePayroll(e.target.checked)}
+                      className="h-4 w-4 accent-emerald-800"
+                    />
+                    <div>
+                      <div className="text-xs font-bold text-slate-900">
+                        Gestion Sociale & Bulletins de Paie
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        Bulletins de salaire & télé-déclarations CNSS / CNAMGS
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold text-emerald-900">
+                    ~{formatFcfa(calculation.monthlyPayroll)} /mois
+                  </span>
+                </label>
+
+                <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-200 bg-white p-3 hover:border-emerald-300">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={includeCreation}
+                      onChange={(e) => setIncludeCreation(e.target.checked)}
+                      className="h-4 w-4 accent-emerald-800"
+                    />
+                    <div>
+                      <div className="text-xs font-bold text-amber-800">
+                        Pack Création d'Entreprise Clé en main
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        Statuts, RCCM, NIF, Publication (Frais uniques)
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold text-amber-800">
+                    + {formatFcfa(calculation.creationOneTime)} (1 fois)
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Summary Card & Quote Transmission Form */}
+          <div className="space-y-6 rounded-3xl border border-emerald-800 bg-emerald-950 p-6 text-white shadow-xl sm:p-8 lg:col-span-5">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-400">
+                  <Sparkles className="h-4 w-4" /> Estimation Tarifaire
+                </span>
+                <span className="rounded border border-emerald-700 bg-emerald-900 px-2 py-0.5 text-[11px] text-emerald-200">
+                  Devis Gratuit
+                </span>
+              </div>
+              <h3 className="mt-1 font-serif text-2xl font-bold text-white">
+                Récapitulatif Financier
+              </h3>
+            </div>
+
+            <div className="space-y-3 rounded-2xl border border-emerald-700/80 bg-emerald-900/80 p-4">
+              <div className="flex items-center justify-between text-xs text-slate-200">
+                <span>Forfait Mensuel Recommandé :</span>
+                <span className="text-sm font-bold text-amber-300">
+                  {formatFcfa(calculation.totalMonthly)} / mois
+                </span>
+              </div>
+
+              {includeCreation && (
+                <div className="flex items-center justify-between border-t border-emerald-800 pt-2 text-xs text-slate-200">
+                  <span>Création d'Entreprise (Unique) :</span>
+                  <span className="font-bold text-amber-300">
+                    {formatFcfa(calculation.creationOneTime)}
+                  </span>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between border-t border-emerald-700 pt-3">
+                <span className="text-xs font-bold uppercase text-white">Estimation Totale :</span>
+                <span className="font-serif text-xl font-bold text-amber-400">
+                  {formatFcfa(calculation.totalEstimatedInitial)}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-1 text-[11px] text-slate-300">
+              <p className="flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 shrink-0 text-amber-400" />
+                <span>Tarif indicatif sans engagement contractuel</span>
+              </p>
+              <p className="flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 shrink-0 text-amber-400" />
+                <span>Adaptation personnalisée selon le volume de pièces réel</span>
+              </p>
+            </div>
+
+            {/* Transmission Form */}
+            {submittedRef ? (
+              <div className="space-y-3 rounded-2xl border border-amber-400/40 bg-amber-500/20 p-5 text-center animate-fade-in">
+                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-amber-400 font-bold text-slate-950">
+                  ✓
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-amber-300">Demande de Devis Transmise !</h4>
+                  <p className="mt-1 text-xs text-slate-200">
+                    Référence dossier :{" "}
+                    <strong className="text-amber-300">{submittedRef}</strong>
+                  </p>
+                  <p className="mt-2 text-[11px] text-slate-300">
+                    Un conseiller A&S CONSULTING vous recontactera sous 24h au {clientPhone} pour
+                    finaliser votre proposition.
+                  </p>
+                </div>
+                <button
+                  onClick={onOpenAppointment}
+                  className="mt-2 w-full rounded-lg bg-amber-400 py-2 text-xs font-bold text-slate-950 shadow hover:bg-amber-300"
+                >
+                  Prendre Rendez-vous au Cabinet
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitQuote} className="space-y-3 pt-2">
+                <h4 className="text-xs font-bold uppercase text-amber-300">
+                  Recevoir cette offre détaillée par Téléphone ou Email
+                </h4>
+
+                <input
+                  type="text"
+                  required
+                  placeholder="Votre Nom complet ou Entreprise"
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  className="w-full rounded-xl border border-emerald-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:border-amber-400 focus:outline-none"
+                />
+
+                <input
+                  type="tel"
+                  required
+                  placeholder="Numéro de Téléphone / WhatsApp"
+                  value={clientPhone}
+                  onChange={(e) => setClientPhone(e.target.value)}
+                  className="w-full rounded-xl border border-emerald-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:border-amber-400 focus:outline-none"
+                />
+
+                <input
+                  type="email"
+                  placeholder="Adresse Email (optionnel)"
+                  value={clientEmail}
+                  onChange={(e) => setClientEmail(e.target.value)}
+                  className="w-full rounded-xl border border-emerald-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:border-amber-400 focus:outline-none"
+                />
+
+                <button
+                  type="submit"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-xs font-bold text-slate-950 shadow-lg transition-colors hover:bg-amber-600"
+                >
+                  <Send className="h-4 w-4" />
+                  <span>Envoyer ma demande de devis</span>
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

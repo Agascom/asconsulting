@@ -1,14 +1,13 @@
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
-import { getSettings } from "@/lib/site";
+import { PortalUiProvider } from "@/components/portal/portal-ui";
 
-export default async function SiteLayout({ children }: LayoutProps<"/">) {
-  const settings = await getSettings();
+export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
-    <>
-      <Header settings={settings} />
+    <PortalUiProvider>
+      <Header />
       <main className="flex-1">{children}</main>
-      <Footer settings={settings} />
-    </>
+      <Footer />
+    </PortalUiProvider>
   );
 }
