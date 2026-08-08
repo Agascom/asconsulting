@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { COMPANY_INFO } from "@/lib/portal-data";
 import { usePortalUi } from "@/components/portal/portal-ui";
 import {
@@ -30,7 +30,21 @@ const NAV_ITEMS = [
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { openAppointment, openSearch } = usePortalUi();
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(h > 0 ? Math.min(100, (y / h) * 100) : 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -39,7 +53,18 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 pt-3 px-3 sm:px-6 max-w-7xl mx-auto">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 max-w-7xl mx-auto transition-all duration-300 ${
+        scrolled ? "pt-1" : "pt-3"
+      }`}
+    >
+      {/* Scroll progress bar */}
+      <div className="absolute left-0 right-0 top-0 h-[3px] bg-transparent" aria-hidden="true">
+        <div
+          className="h-full bg-gradient-to-r from-orange-500 to-amber-400 transition-[width] duration-100 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
       {/* Top micro bar for fast contact & location */}
       <div className="hidden lg:flex items-center justify-between px-6 py-1 bg-slate-950/90 backdrop-blur-md rounded-t-2xl border-t border-x border-white/10 text-[11px] text-slate-300">
         <div className="flex items-center gap-4">
@@ -66,7 +91,11 @@ export function Header() {
       </div>
 
       {/* Main Glass Navigation Bar */}
-      <nav className="bg-slate-900/90 backdrop-blur-xl border border-white/15 rounded-full px-5 py-2.5 flex items-center justify-between text-white shadow-2xl">
+      <nav
+        className={`bg-slate-900/90 backdrop-blur-xl border border-white/15 rounded-full px-5 flex items-center justify-between text-white shadow-2xl transition-all duration-300 ${
+          scrolled ? "py-1.5" : "py-2.5"
+        }`}
+      >
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 cursor-pointer group">
           <div className="relative w-10 h-10 shrink-0 overflow-hidden rounded-full bg-white/10 border border-white/20">

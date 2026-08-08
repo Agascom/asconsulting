@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Reveal } from "@/components/site/reveal";
 import { Sparkles, Send, Building2, Users, Receipt, Check } from "lucide-react";
 
 interface QuoteSimulatorProps {
@@ -160,7 +161,7 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
   return (
     <section id="simulator" className="mx-auto w-full max-w-7xl space-y-10 px-4 sm:px-8 lg:px-12">
       {/* Header */}
-      <div className="mx-auto max-w-3xl space-y-3 text-center">
+      <Reveal className="mx-auto max-w-3xl space-y-3 text-center">
         <span className="inline-block rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-orange-400">
           Simulateur En Ligne
         </span>
@@ -171,12 +172,12 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
           Sélectionnez les paramètres de votre entreprise pour recevoir une proposition tarifaire
           ajustée.
         </p>
-      </div>
+      </Reveal>
 
       {/* Simulator Workspace */}
       <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
         {/* Left Controls Form */}
-        <div className="space-y-6 rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl sm:p-8 lg:col-span-7">
+        <Reveal from="left" className="space-y-6 rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl sm:p-8 lg:col-span-7">
           {/* Step 1: Structure type */}
           <div className="space-y-3">
             <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -264,7 +265,7 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
             </label>
 
             <div className="space-y-2">
-              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 hover:border-orange-500">
+              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-500">
                 <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -286,7 +287,7 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
                 </span>
               </label>
 
-              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 hover:border-orange-500">
+              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-500">
                 <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -308,7 +309,7 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
                 </span>
               </label>
 
-              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 hover:border-orange-500">
+              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-500">
                 <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -330,7 +331,7 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
                 </span>
               </label>
 
-              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 hover:border-orange-500">
+              <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-500">
                 <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -353,10 +354,14 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
               </label>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Right Summary Card & Quote Transmission Form */}
-        <div className="space-y-6 rounded-3xl border border-orange-500/40 bg-slate-950 p-6 text-white shadow-xl sm:p-8 lg:col-span-5">
+        <Reveal
+          from="right"
+          delay={150}
+          className="space-y-6 rounded-3xl border border-orange-500/40 bg-slate-950 p-6 text-white shadow-xl sm:p-8 lg:col-span-5"
+        >
           <div>
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-orange-400">
@@ -471,14 +476,14 @@ export function QuoteSimulator({ onOpenAppointment }: QuoteSimulatorProps) {
               <button
                 type="submit"
                 disabled={pending}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 py-3 text-xs font-black text-white shadow-lg transition-colors hover:from-orange-600 hover:to-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 py-3 text-xs font-black text-white shadow-lg transition-all hover:from-orange-600 hover:to-amber-600 hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Send className="h-4 w-4" />
                 <span>{pending ? "Envoi en cours..." : "Envoyer ma demande de devis"}</span>
               </button>
             </form>
           )}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

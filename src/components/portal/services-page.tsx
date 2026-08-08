@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { usePortalUi } from "@/components/portal/portal-ui";
 import { QuoteSimulator } from "@/components/portal/quote-simulator";
+import { Reveal } from "@/components/site/reveal";
 import { CORE_SERVICES } from "@/lib/portal-data";
 import {
   Calculator,
@@ -40,7 +41,7 @@ export function ServicesPage() {
   return (
     <div className="pt-32 pb-20 px-4 sm:px-8 lg:px-12 bg-slate-950 text-white min-h-screen space-y-16">
       {/* Header */}
-      <div className="max-w-7xl mx-auto space-y-4 text-center">
+      <Reveal className="max-w-7xl mx-auto space-y-4 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-extrabold border border-orange-500/30 uppercase tracking-widest">
           <Sparkles className="w-4 h-4 text-orange-500" /> Nos Domaines d'Expertise
         </div>
@@ -51,12 +52,12 @@ export function ServicesPage() {
           Un accompagnement professionnel sur mesure adapté à la taille de votre entreprise pour
           sécuriser votre croissance.
         </p>
-      </div>
+      </Reveal>
 
       {/* Services Grid with Selection Tabs */}
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Navigation Tabs for Services */}
-        <div className="flex border-b border-slate-800 gap-2 sm:gap-4 overflow-x-auto pb-3">
+        <Reveal delay={120} className="flex border-b border-slate-800 gap-2 sm:gap-4 overflow-x-auto pb-3">
           {CORE_SERVICES.map((srv) => {
             const Icon = getIcon(srv.iconName);
             const isSelected = selectedServiceId === srv.id;
@@ -64,7 +65,7 @@ export function ServicesPage() {
               <button
                 key={srv.id}
                 onClick={() => setSelectedServiceId(srv.id)}
-                className={`px-5 py-3 rounded-2xl flex items-center gap-2.5 text-xs font-extrabold transition-all whitespace-nowrap shrink-0 ${
+                className={`px-5 py-3 rounded-2xl flex items-center gap-2.5 text-xs font-extrabold transition-all duration-200 whitespace-nowrap shrink-0 ${
                   isSelected
                     ? "bg-orange-500 text-white shadow-lg shadow-orange-500/30"
                     : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800"
@@ -75,10 +76,10 @@ export function ServicesPage() {
               </button>
             );
           })}
-        </div>
+        </Reveal>
 
         {/* Selected Service Detailed View */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <Reveal delay={180} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-6 space-y-6">
             <div className="space-y-2">
               <span className="text-xs font-black uppercase text-orange-400 tracking-wider">
@@ -105,10 +106,10 @@ export function ServicesPage() {
             <div className="pt-4 flex flex-wrap gap-4">
               <button
                 onClick={openAppointment}
-                className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black text-xs rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+                className="group px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black text-xs rounded-full shadow-lg transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
               >
                 <span>Demander Un Devis pour ce Service</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
             </div>
           </div>
@@ -131,7 +132,7 @@ export function ServicesPage() {
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Interactive Quote Simulator / Devis Gratuit */}

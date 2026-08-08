@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { usePortalNavigation, usePortalUi } from "@/components/portal/portal-ui";
+import { Reveal } from "@/components/site/reveal";
 import { CORE_SERVICES, COMPANY_INFO } from "@/lib/portal-data";
 import {
   ArrowRight,
@@ -58,43 +59,49 @@ export function PortalHome() {
 
         {/* Hero Headline Content */}
         <div className="relative z-10 max-w-4xl pt-12 sm:pt-16 space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-black border border-orange-500/30 uppercase tracking-widest backdrop-blur-md">
-            <ShieldCheck className="w-4 h-4 text-orange-500" /> Cabinet Expert Agréé à Libreville
-          </div>
+          <Reveal>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-black border border-orange-500/30 uppercase tracking-widest backdrop-blur-md">
+              <ShieldCheck className="w-4 h-4 text-orange-500" /> Cabinet Expert Agréé à Libreville
+            </div>
+          </Reveal>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.08] max-w-3xl drop-shadow-xl">
-            Gestion Comptable, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-              Fiscale & Sociale
-            </span>{" "}
-            <br />
-            de Votre Entreprise.
-          </h1>
+          <Reveal delay={120}>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.08] max-w-3xl drop-shadow-xl">
+              Gestion Comptable, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300 bg-[length:200%_auto] animate-gradient-x">
+                Fiscale & Sociale
+              </span>{" "}
+              <br />
+              de Votre Entreprise.
+            </h1>
+          </Reveal>
 
-          <p className="text-sm sm:text-lg text-slate-200 font-normal max-w-2xl leading-relaxed drop-shadow">
-            A&S CONSULTING vous accompagne dans l'optimisation de votre gestion comptable, le
-            respect strict de vos obligations légales et la création de votre société au Gabon.
-          </p>
+          <Reveal delay={240}>
+            <p className="text-sm sm:text-lg text-slate-200 font-normal max-w-2xl leading-relaxed drop-shadow">
+              A&S CONSULTING vous accompagne dans l'optimisation de votre gestion comptable, le
+              respect strict de vos obligations légales et la création de votre société au Gabon.
+            </p>
+          </Reveal>
 
           {/* Interactive Badges & Action Buttons */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <Reveal delay={360} className="flex flex-wrap items-center gap-4 pt-2">
             <button
               onClick={openAppointment}
               className="flex items-center gap-3 pl-6 pr-2 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-full font-black text-xs transition-all duration-300 shadow-xl hover:scale-105 active:scale-95 group"
             >
               <span>Demander Un Rendez-Vous</span>
               <div className="w-8 h-8 rounded-full bg-slate-950 text-white flex items-center justify-center transition-colors">
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </div>
             </button>
 
             <button
               onClick={() => handleNavigate("creation")}
-              className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full font-extrabold text-xs transition-all hover:scale-105"
+              className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full font-extrabold text-xs transition-all hover:scale-105 active:scale-95"
             >
               Créer Mon Entreprise
             </button>
-          </div>
+          </Reveal>
         </div>
 
         {/* Hero Bottom Label & Navigation */}
@@ -116,14 +123,14 @@ export function PortalHome() {
       {/* Services Cards Row Overlay */}
       <section className="relative z-20 -mt-10 sm:-mt-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {CORE_SERVICES.map((srv) => {
+          {CORE_SERVICES.map((srv, idx) => {
             const Icon = getIcon(srv.iconName);
             return (
-              <div
-                key={srv.id}
-                onClick={() => handleNavigate("services")}
-                className="bg-slate-900 border border-slate-800 rounded-3xl p-3 hover:border-orange-500 transition-all duration-300 shadow-2xl group cursor-pointer flex flex-col justify-between"
-              >
+              <Reveal key={srv.id} delay={idx * 90}>
+                <div
+                  onClick={() => handleNavigate("services")}
+                  className="bg-slate-900 border border-slate-800 rounded-3xl p-3 hover:border-orange-500 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/10 shadow-2xl group cursor-pointer flex flex-col justify-between h-full"
+                >
                 <div className="relative h-56 w-full overflow-hidden rounded-t-[90px] rounded-b-2xl">
                   <Image
                     src={srv.image}
@@ -157,7 +164,8 @@ export function PortalHome() {
                     En savoir +
                   </span>
                 </div>
-              </div>
+                </div>
+              </Reveal>
             );
           })}
         </div>
@@ -166,7 +174,7 @@ export function PortalHome() {
       {/* Presentation & Location Section */}
       <section className="py-20 px-4 sm:px-8 lg:px-12 bg-slate-900 text-white border-y border-slate-800">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 space-y-6">
+          <Reveal from="left" className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-black border border-orange-500/20">
               <Building2 className="w-4 h-4 text-orange-500" /> Présentation A&S CONSULTING
             </div>
@@ -184,30 +192,38 @@ export function PortalHome() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              {CORE_SERVICES.map((item) => (
-                <div key={item.id} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1.5">
+              {CORE_SERVICES.map((item, idx) => (
+                <Reveal
+                  key={item.id}
+                  delay={120 + idx * 80}
+                  className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1.5 hover:border-orange-500/50 transition-colors"
+                >
                   <div className="flex items-center gap-2 text-orange-400 font-extrabold text-xs">
                     <CheckCircle2 className="w-4 h-4 text-orange-500 shrink-0" />
                     <span>{item.title}</span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">{item.shortDesc}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
 
             <div className="pt-4 flex items-center gap-4">
               <button
                 onClick={() => handleNavigate("about")}
-                className="px-6 py-3 bg-white text-slate-950 hover:bg-orange-500 hover:text-white font-black text-xs rounded-full transition-all shadow-xl hover:scale-105"
+                className="px-6 py-3 bg-white text-slate-950 hover:bg-orange-500 hover:text-white font-black text-xs rounded-full transition-all shadow-xl hover:scale-105 active:scale-95"
               >
                 Découvrir Notre Cabinet
               </button>
             </div>
-          </div>
+          </Reveal>
 
           {/* Location Banner Card */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-slate-950 to-slate-900 p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-6 relative overflow-hidden">
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 border border-orange-500/30 flex items-center justify-center">
+          <Reveal
+            from="right"
+            delay={150}
+            className="lg:col-span-5 bg-gradient-to-br from-slate-950 to-slate-900 p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-6 relative overflow-hidden"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 border border-orange-500/30 flex items-center justify-center animate-float">
               <MapPin className="w-6 h-6" />
             </div>
 
@@ -236,19 +252,19 @@ export function PortalHome() {
 
             <button
               onClick={() => handleNavigate("location")}
-              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs rounded-full transition-all flex items-center justify-center gap-2 shadow-lg"
+              className="group/btn w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs rounded-full transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
             >
               <span>Voir la Carte & Les Accès</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
             </button>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Target Audience Section */}
       <section className="py-20 px-4 sm:px-8 lg:px-12 bg-slate-950 text-white">
         <div className="max-w-7xl mx-auto space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
+          <Reveal className="text-center max-w-2xl mx-auto space-y-3">
             <h2 className="text-3xl sm:text-4xl font-black text-white">
               Une Solution Sur Mesure pour <span className="text-orange-500">Chaque Structure</span>
             </h2>
@@ -256,7 +272,7 @@ export function PortalHome() {
               Avec A&S CONSULTING, bénéficiez d'un service personnalisé et adapté à vos besoins, que
               vous soyez une PME, une startup ou un entrepreneur individuel.
             </p>
-          </div>
+          </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
@@ -278,22 +294,22 @@ export function PortalHome() {
             ].map((aud, idx) => {
               const AudIcon = aud.icon;
               return (
-                <div
-                  key={idx}
-                  className="bg-slate-900 p-8 rounded-3xl border border-slate-800 space-y-4 hover:border-orange-500 transition-colors shadow-xl"
-                >
-                  <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center">
-                    <AudIcon className="w-6 h-6" />
+                <Reveal key={idx} delay={idx * 120}>
+                  <div className="bg-slate-900 p-8 rounded-3xl border border-slate-800 space-y-4 hover:border-orange-500 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/10 shadow-xl group h-full">
+                    <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center transition-colors group-hover:bg-orange-500 group-hover:text-white">
+                      <AudIcon className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-extrabold text-xl text-white">{aud.title}</h3>
+                    <p className="text-xs text-slate-300 leading-relaxed font-normal">{aud.desc}</p>
+                    <button
+                      onClick={openAppointment}
+                      className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1 group/cta"
+                    >
+                      Demander une consultation{" "}
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/cta:translate-x-1" />
+                    </button>
                   </div>
-                  <h3 className="font-extrabold text-xl text-white">{aud.title}</h3>
-                  <p className="text-xs text-slate-300 leading-relaxed font-normal">{aud.desc}</p>
-                  <button
-                    onClick={openAppointment}
-                    className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1"
-                  >
-                    Demander une consultation <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                </Reveal>
               );
             })}
           </div>

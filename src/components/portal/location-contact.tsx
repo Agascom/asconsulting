@@ -4,6 +4,7 @@ import { useState } from "react";
 import { COMPANY_INFO } from "@/lib/portal-data";
 import { usePortalUi } from "@/components/portal/portal-ui";
 import { WhatsAppIcon } from "@/components/site/whatsapp-button";
+import { Reveal } from "@/components/site/reveal";
 import {
   MapPin,
   Phone,
@@ -77,7 +78,7 @@ export function LocationContact() {
   return (
     <div className="pt-32 pb-20 px-4 sm:px-8 lg:px-12 bg-slate-950 text-white min-h-screen space-y-16">
       {/* Header */}
-      <div className="max-w-7xl mx-auto space-y-4 text-center">
+      <Reveal className="max-w-7xl mx-auto space-y-4 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-extrabold border border-orange-500/30 uppercase tracking-widest">
           <MapPin className="w-4 h-4 text-orange-500" /> Localisation & Rendez-Vous Cabinet
         </div>
@@ -87,13 +88,13 @@ export function LocationContact() {
         <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
           {COMPANY_INFO.tagline}
         </p>
-      </div>
+      </Reveal>
 
       {/* Main Location Cards */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Direct Address & Access Instructions */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+        <Reveal from="left" className="lg:col-span-5 space-y-6">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-orange-500/10">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-extrabold shadow-lg">
                 <MapPin className="w-5 h-5" />
@@ -189,16 +190,16 @@ export function LocationContact() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-3 bg-[#25D366] hover:bg-[#1eb85a] text-white rounded-xl font-extrabold transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#25D366] hover:bg-[#1eb85a] text-white rounded-xl font-extrabold transition-all flex items-center justify-center gap-2 active:scale-[0.99]"
             >
               <WhatsAppIcon className="w-4 h-4" />
               <span>Contacter le Cabinet sur WhatsApp</span>
             </a>
           </div>
-        </div>
+        </Reveal>
 
         {/* Right Column: Interactive Map Simulation + Contact Form */}
-        <div className="lg:col-span-7 space-y-6">
+        <Reveal from="right" delay={150} className="lg:col-span-7 space-y-6">
           {/* Visual Map Representation */}
           <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative h-64 sm:h-72">
             <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 text-center space-y-3">
@@ -341,9 +342,9 @@ export function LocationContact() {
                 <button
                   type="submit"
                   disabled={pending}
-                  className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-xs rounded-full shadow-lg transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="group w-full py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-xs rounded-full shadow-lg transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.99]"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                   <span>
                     {pending ? "Envoi en cours..." : "Confirmer Ma Demande De Rendez-vous"}
                   </span>
@@ -351,7 +352,7 @@ export function LocationContact() {
               </form>
             )}
           </div>
-        </div>
+        </Reveal>
       </div>
     </div>
   );

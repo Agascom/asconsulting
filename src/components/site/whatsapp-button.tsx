@@ -24,8 +24,9 @@ export function WhatsAppButton() {
       aria-label="Discuter avec A&S CONSULTING sur WhatsApp"
       className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-white shadow-2xl shadow-black/40 transition-transform hover:scale-105 active:scale-95"
     >
-      <WhatsAppIcon className="h-6 w-6" />
-      <span className="hidden text-sm font-extrabold sm:inline">WhatsApp</span>
+      <span className="pointer-events-none absolute inset-0 rounded-full bg-[#25D366] animate-pulse-ring" aria-hidden="true" />
+      <WhatsAppIcon className="h-6 w-6 relative" />
+      <span className="hidden text-sm font-extrabold sm:inline relative">WhatsApp</span>
     </a>
   );
 }

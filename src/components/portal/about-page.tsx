@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { usePortalNavigation, usePortalUi } from "@/components/portal/portal-ui";
+import { Reveal } from "@/components/site/reveal";
 import { ShieldCheck, Target, Award, CheckCircle2, ArrowRight } from "lucide-react";
 
 const officeImg = "/images/home1.jpeg";
@@ -13,7 +14,7 @@ export function AboutPage() {
   return (
     <div className="pt-32 pb-20 px-4 sm:px-8 lg:px-12 bg-slate-950 text-white min-h-screen space-y-16">
       {/* Top Banner Header */}
-      <div className="max-w-7xl mx-auto space-y-4 text-center">
+      <Reveal className="max-w-7xl mx-auto space-y-4 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-extrabold border border-orange-500/30 uppercase tracking-widest">
           <ShieldCheck className="w-4 h-4 text-orange-500" /> À Propos De Notre Cabinet
         </div>
@@ -24,11 +25,11 @@ export function AboutPage() {
           Votre partenaire privilégié à Libreville pour la gestion comptable, la sérénité fiscale et
           le développement juridique de vos activités.
         </p>
-      </div>
+      </Reveal>
 
       {/* Main Narrative Card */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div className="lg:col-span-6 relative rounded-3xl overflow-hidden border border-slate-800 shadow-2xl group">
+        <Reveal from="left" className="lg:col-span-6 relative rounded-3xl overflow-hidden border border-slate-800 shadow-2xl group">
           <Image
             src={officeImg}
             alt="A&S Consulting Office"
@@ -50,9 +51,9 @@ export function AboutPage() {
               Libreville
             </span>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="lg:col-span-6 space-y-6">
+        <Reveal from="right" delay={120} className="lg:col-span-6 space-y-6">
           <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
             Notre Mission : Vous Décharger des{" "}
             <span className="text-orange-500">Procédures Complexes</span>.
@@ -72,39 +73,39 @@ export function AboutPage() {
               "Prise en charge des salaires, fiches de paie et cotisations CNSS",
               "Création d'entreprise clé en main : statuts, immatriculation NIF & RCCM",
             ].map((p, idx) => (
-              <div key={idx} className="flex items-start gap-3 text-xs text-slate-200">
+              <Reveal key={idx} delay={200 + idx * 70} className="flex items-start gap-3 text-xs text-slate-200">
                 <CheckCircle2 className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
                 <span>{p}</span>
-              </div>
+              </Reveal>
             ))}
           </div>
 
           <div className="pt-4 flex flex-wrap gap-4">
             <button
               onClick={openAppointment}
-              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-xs rounded-full shadow-lg transition-all hover:scale-105"
+              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-xs rounded-full shadow-lg transition-all hover:scale-105 active:scale-95"
             >
               Prendre Rendez-vous au Cabinet
             </button>
             <button
               onClick={() => handleNavigate("location")}
-              className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-full border border-slate-800 transition-colors"
+              className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-full border border-slate-800 transition-all active:scale-95"
             >
               Voir la Localisation
             </button>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* 3 Pillars Values */}
       <div className="max-w-7xl mx-auto pt-8">
-        <div className="text-center max-w-xl mx-auto mb-10 space-y-2">
+        <Reveal className="text-center max-w-xl mx-auto mb-10 space-y-2">
           <h2 className="text-2xl sm:text-4xl font-black text-white">Nos Engagements & Valeurs</h2>
           <p className="text-xs text-slate-400">
             Une éthique professionnelle stricte au service de la sécurité juridique de votre
             entreprise.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -126,22 +127,22 @@ export function AboutPage() {
           ].map((val, idx) => {
             const ValIcon = val.icon;
             return (
-              <div
-                key={idx}
-                className="bg-slate-900 p-8 rounded-3xl border border-slate-800 space-y-4 hover:border-orange-500 transition-colors shadow-xl"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center">
-                  <ValIcon className="w-6 h-6" />
+              <Reveal key={idx} delay={idx * 120}>
+                <div className="bg-slate-900 p-8 rounded-3xl border border-slate-800 space-y-4 hover:border-orange-500 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/10 shadow-xl group h-full">
+                  <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center transition-colors group-hover:bg-orange-500 group-hover:text-white">
+                    <ValIcon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-extrabold text-lg text-white">{val.title}</h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">{val.desc}</p>
+                  <button
+                    onClick={openAppointment}
+                    className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1 group/cta"
+                  >
+                    Consulter un expert{" "}
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/cta:translate-x-1" />
+                  </button>
                 </div>
-                <h3 className="font-extrabold text-lg text-white">{val.title}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">{val.desc}</p>
-                <button
-                  onClick={openAppointment}
-                  className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1"
-                >
-                  Consulter un expert <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
+              </Reveal>
             );
           })}
         </div>

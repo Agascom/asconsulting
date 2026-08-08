@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CLIENT_DOCUMENTS, TAX_CALENDAR } from "@/lib/portal-data";
+import { Reveal } from "@/components/site/reveal";
 import {
   Upload,
   Download,
@@ -32,7 +33,7 @@ export function ClientSpaceDemo() {
   return (
     <div className="pt-32 pb-20 px-4 sm:px-8 lg:px-12 bg-slate-950 text-white min-h-screen space-y-12">
       {/* Top Banner */}
-      <div className="max-w-7xl mx-auto space-y-4 text-center">
+      <Reveal className="max-w-7xl mx-auto space-y-4 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-extrabold border border-orange-500/30 uppercase tracking-widest">
           <Lock className="w-4 h-4 text-orange-500" /> Espace Sécurisé Client A&S CONSULTING
         </div>
@@ -43,11 +44,11 @@ export function ClientSpaceDemo() {
           Déposez vos factures, téléchargez vos documents fiscaux certifiés (Quitus Fiscal, Bilan)
           et suivez votre calendrier d'échéances.
         </p>
-      </div>
+      </Reveal>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* File Upload Box */}
-        <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+        <Reveal from="left" className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold text-lg text-white flex items-center gap-2">
               <Upload className="w-5 h-5 text-orange-500" />
@@ -110,10 +111,10 @@ export function ClientSpaceDemo() {
               )}
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Certified Downloads */}
-        <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+        <Reveal from="right" delay={150} className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold text-lg text-white flex items-center gap-2">
               <Download className="w-5 h-5 text-orange-500" />
@@ -125,10 +126,11 @@ export function ClientSpaceDemo() {
           </div>
 
           <div className="space-y-3">
-            {CLIENT_DOCUMENTS.map((doc) => (
-              <div
+            {CLIENT_DOCUMENTS.map((doc, idx) => (
+              <Reveal
                 key={doc.id}
-                className="p-4 bg-slate-950 rounded-2xl border border-slate-800 hover:border-slate-700 transition-colors flex items-center justify-between gap-4"
+                delay={200 + idx * 80}
+                className="p-4 bg-slate-950 rounded-2xl border border-slate-800 hover:border-slate-600 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-between gap-4"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -150,18 +152,18 @@ export function ClientSpaceDemo() {
 
                 <button
                   onClick={() => handleDownload(doc.title)}
-                  className="p-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition-all shadow-md shrink-0"
+                  className="p-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition-all shadow-md shrink-0 active:scale-90"
                 >
                   <Download className="w-4 h-4" />
                 </button>
-              </div>
+              </Reveal>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Tax Calendar Task Grid */}
-      <div className="max-w-7xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+      <Reveal delay={100} className="max-w-7xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-extrabold text-lg text-white flex items-center gap-2">
@@ -179,7 +181,7 @@ export function ClientSpaceDemo() {
             const isDone = task.status === "Effectué";
             const isInProgress = task.status === "En cours";
             return (
-              <div key={task.id} className="p-5 bg-slate-950 rounded-2xl border border-slate-800 space-y-3">
+              <div key={task.id} className="p-5 bg-slate-950 rounded-2xl border border-slate-800 space-y-3 transition-all duration-300 hover:-translate-y-1 hover:border-orange-500/50">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-mono text-orange-400 font-bold">{task.category}</span>
                   <span
@@ -207,7 +209,7 @@ export function ClientSpaceDemo() {
             );
           })}
         </div>
-      </div>
+      </Reveal>
     </div>
   );
 }

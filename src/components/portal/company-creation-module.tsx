@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { LEGAL_FORMS } from "@/lib/portal-data";
+import { Reveal } from "@/components/site/reveal";
 import {
   Briefcase,
   CheckCircle2,
@@ -58,7 +59,7 @@ export function CompanyCreationModule({ onOpenAppointment }: CompanyCreationModu
   return (
     <div className="pt-32 pb-20 px-4 sm:px-8 lg:px-12 bg-slate-950 text-white min-h-screen space-y-16">
       {/* Page Header */}
-      <div className="max-w-7xl mx-auto space-y-4 text-center">
+      <Reveal className="max-w-7xl mx-auto space-y-4 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-extrabold border border-orange-500/30 uppercase tracking-widest">
           <Briefcase className="w-4 h-4 text-orange-500" /> Guichet Création d'Entreprise Clé en
           Main
@@ -70,47 +71,46 @@ export function CompanyCreationModule({ onOpenAppointment }: CompanyCreationModu
           Nous vous guidons à chaque étape du processus de création de votre société au Gabon, du
           montage du dossier jusqu'à l'enregistrement définitif (NIF & RCCM).
         </p>
-      </div>
+      </Reveal>
 
       {/* 4 Steps Timeline */}
-      <div className="max-w-7xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+      <Reveal delay={120} className="max-w-7xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
         <h2 className="text-xl sm:text-3xl font-black text-white text-center">
           Le Processus de Création en 4 Étapes
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map((st) => (
-            <div
-              key={st.step}
-              className="bg-slate-950 p-6 rounded-2xl border border-slate-800 relative space-y-3"
-            >
-              <div className="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 font-black text-sm flex items-center justify-center border border-orange-500/30">
-                {st.step}
+          {steps.map((st, idx) => (
+            <Reveal key={st.step} delay={200 + idx * 100}>
+              <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 relative space-y-3 h-full transition-all duration-300 hover:-translate-y-1.5 hover:border-orange-500/60">
+                <div className="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 font-black text-sm flex items-center justify-center border border-orange-500/30">
+                  {st.step}
+                </div>
+                <h3 className="font-extrabold text-sm text-white">{st.title}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">{st.desc}</p>
               </div>
-              <h3 className="font-extrabold text-sm text-white">{st.title}</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">{st.desc}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
-      </div>
+      </Reveal>
 
       {/* Legal Forms Comparison */}
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="text-center max-w-xl mx-auto space-y-2">
+        <Reveal className="text-center max-w-xl mx-auto space-y-2">
           <h2 className="text-2xl sm:text-4xl font-black text-white">
             Quelle Forme Juridique Choisir ?
           </h2>
           <p className="text-xs text-slate-400">
             Découvrez les caractéristiques principales des structures d'entreprise au Gabon.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="flex border-b border-slate-800 gap-3 justify-center overflow-x-auto pb-2">
+        <Reveal delay={120} className="flex border-b border-slate-800 gap-3 justify-center overflow-x-auto pb-2">
           {LEGAL_FORMS.map((form) => (
             <button
               key={form.code}
               onClick={() => setSelectedFormCode(form.code)}
-              className={`px-6 py-3 rounded-2xl text-xs font-black transition-all whitespace-nowrap ${
+              className={`px-6 py-3 rounded-2xl text-xs font-black transition-all duration-200 whitespace-nowrap ${
                 selectedFormCode === form.code
                   ? "bg-orange-500 text-white shadow-lg shadow-orange-500/30"
                   : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
@@ -119,9 +119,9 @@ export function CompanyCreationModule({ onOpenAppointment }: CompanyCreationModu
               {form.code}
             </button>
           ))}
-        </div>
+        </Reveal>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <Reveal delay={160} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-1">
               <span className="text-xs font-black uppercase text-orange-400">
@@ -250,11 +250,11 @@ export function CompanyCreationModule({ onOpenAppointment }: CompanyCreationModu
               </form>
             )}
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Closing CTA */}
-      <div className="max-w-7xl mx-auto bg-gradient-to-r from-orange-500/15 to-amber-500/10 border border-orange-500/30 rounded-3xl p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <Reveal className="max-w-7xl mx-auto bg-gradient-to-r from-orange-500/15 to-amber-500/10 border border-orange-500/30 rounded-3xl p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="space-y-2 text-center sm:text-left">
           <h2 className="text-2xl sm:text-3xl font-black text-white">
             Prêt à Lancer Votre <span className="text-orange-500">Société</span> ?
@@ -267,13 +267,13 @@ export function CompanyCreationModule({ onOpenAppointment }: CompanyCreationModu
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={onOpenAppointment}
-            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-xs rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-xs rounded-full shadow-lg transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Prendre RDV avec un Conseiller</span>
           </button>
         </div>
-      </div>
+      </Reveal>
     </div>
   );
 }
