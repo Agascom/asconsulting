@@ -4,8 +4,8 @@ export const SITE = {
   tagline:
     "Cabinet de gestion comptable, fiscale, sociale et administrative à Libreville",
   facebook: "https://www.facebook.com/profile.php?id=100087006793876",
-  defaultPhone: "+241 XX XX XX XX",
-  defaultEmail: "contact@as-consulting.ga",
+  defaultPhone: "+241 07 75 79 908",
+  defaultEmail: "asconsulting.ga@gmail.com",
   defaultAddress: "Carrefour Léon Mba, Libreville — Gabon",
   defaultHours: "Lun – Ven : 8h00 – 17h30 · Sam : 9h00 – 13h00",
 };

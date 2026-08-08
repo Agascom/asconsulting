@@ -208,8 +208,8 @@ export function Footer() {
 
       {/* Legal Modal */}
       {showLegalModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-lg space-y-4 rounded-2xl border border-slate-700 bg-slate-900 p-6 text-white shadow-2xl animate-scale-up">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/80 p-4 backdrop-blur-sm animate-fade-in sm:items-center">
+          <div className="my-6 w-full max-w-lg space-y-4 rounded-2xl border border-slate-700 bg-slate-900 p-6 text-white shadow-2xl animate-scale-up">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="font-extrabold text-base text-white">
                 Mentions Légales - A&S CONSULTING

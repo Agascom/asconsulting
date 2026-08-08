@@ -183,7 +183,7 @@ async function main() {
 
   const settings: Record<string, string> = {
     "contact.phone": process.env.SITE_PHONE ?? "+241 XX XX XX XX",
-    "contact.email": process.env.SITE_EMAIL ?? "contact@as-consulting.ga",
+    "contact.email": process.env.SITE_EMAIL ?? "asconsulting.ga@gmail.com",
     "contact.address": "Carrefour Léon Mba, face UBA gare routière, Libreville — Gabon",
     "contact.hours": "Lun – Ven : 8h00 – 17h30 · Sam : 9h00 – 13h00",
     "contact.whatsapp": process.env.SITE_WHATSAPP ?? "",

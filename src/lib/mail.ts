@@ -51,7 +51,7 @@ export async function sendContactNotification(args: {
   service?: string;
   message: string;
 }) {
-  const to = process.env.MAIL_TO ?? "";
+  const to = process.env.MAIL_TO ?? "asconsulting.ga@gmail.com";
   if (!to) return;
 
   const subject = `Nouvelle demande de contact — ${args.firstName} ${args.lastName}`;

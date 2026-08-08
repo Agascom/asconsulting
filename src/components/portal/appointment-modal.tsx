@@ -76,8 +76,8 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl animate-scale-up">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/80 p-4 backdrop-blur-sm animate-fade-in sm:items-center">
+      <div className="relative my-6 w-full max-w-lg overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl animate-scale-up">
         {/* Header */}
         <div className="relative bg-emerald-950 p-6 text-white">
           <button

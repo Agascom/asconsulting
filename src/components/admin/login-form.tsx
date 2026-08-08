@@ -68,7 +68,7 @@ export function LoginForm() {
               required
               autoComplete="email"
               className="w-full rounded-md border border-slate-300 px-3.5 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
-              placeholder="admin@as-consulting.ga"
+              placeholder="asconsulting.ga@gmail.com"
             />
           </div>
           <div>

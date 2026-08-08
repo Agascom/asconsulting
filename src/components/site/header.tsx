@@ -138,7 +138,7 @@ export function Header() {
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Menu"
-          className="lg:hidden p-2 rounded-full bg-white/10 text-white border border-white/20 focus:outline-none sm:hidden"
+          className="lg:hidden p-2 rounded-full bg-white/10 text-white border border-white/20 focus:outline-none"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>

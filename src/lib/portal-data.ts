@@ -79,9 +79,10 @@ export const COMPANY_INFO = {
   addressLine1: "A proximité du carrefour Léon Mba",
   addressLine2: "Non loin de la banque UBA de la gare routière",
   city: "Libreville, Gabon",
-  phonePrimary: "+241 07 45 88 12",
-  phoneSecondary: "+241 06 22 10 05",
-  email: "contact@asconsulting-ga.com",
+  phonePrimary: "+241 07 75 79 908",
+  phoneSecondary: "+241 066 705 470",
+  email: "asconsulting.ga@gmail.com",
+  whatsapp: "+241077579908",
   workingHours: "Lundi - Vendredi: 08h00 - 18h00 | Samedi: 08h30 - 13h00",
   googleMapsQuery: "Carrefour Léon Mba, Gare Routière, UBA Bank, Libreville",
   stats: [

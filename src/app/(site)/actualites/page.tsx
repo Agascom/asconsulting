@@ -1,8 +1,13 @@
 import { db } from "@/lib/db";
 import { PostCard } from "@/components/site/cards";
 import { PageHeader, CTABand } from "@/components/site/sections";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function ActualitesPage() {
   const posts = await db.post.findMany({

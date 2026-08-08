@@ -1,8 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Icon } from "@/components/site/icons";
 import { PageHeader, CTABand } from "@/components/site/sections";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 const DIFFERENCIATEURS = [
   {

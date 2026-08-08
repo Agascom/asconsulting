@@ -3,7 +3,10 @@ import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { AdminShell } from "@/components/admin/admin-shell";
 
-export const metadata = { title: "Administration — A&S Consulting" };
+export const metadata = {
+  title: "Administration — A&S Consulting",
+  robots: { index: false, follow: false },
+};
 
 export default async function ProtectedLayout({
   children,

@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
+import type { Metadata } from "next";
 import { FaqList } from "@/components/site/faq-list";
 import { PageHeader } from "@/components/site/sections";
 import { Icon } from "@/components/site/icons";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function FaqPage() {
   const faqs = await db.faqItem.findMany({

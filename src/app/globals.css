@@ -4,30 +4,56 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Primaire : orange (expertise, énergie, appel à l'action) */
-  --color-brand-50: #fff7ed;
-  --color-brand-100: #ffedd5;
-  --color-brand-200: #fed7aa;
-  --color-brand-300: #fdba74;
-  --color-brand-400: #fb923c;
-  --color-brand-500: #f97316;
-  --color-brand-600: #ea580c;
-  --color-brand-700: #c2410c;
-  --color-brand-800: #9a3412;
-  --color-brand-900: #7c2d12;
-  --color-brand-950: #431407;
+  /* Primaire : bleu du logo (#128FC9) — expertise, énergie, appel à l'action */
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f4fd;
+  --color-brand-200: #b8e8fb;
+  --color-brand-300: #79d4f6;
+  --color-brand-400: #3ab9ec;
+  --color-brand-500: #128fc9;
+  --color-brand-600: #0d78ad;
+  --color-brand-700: #0e628d;
+  --color-brand-800: #105274;
+  --color-brand-900: #114361;
+  --color-brand-950: #0a2b42;
 
-  /* Accent — ambre (appel à l'action, liens, highlights) */
-  --color-gold-50: #fffbeb;
-  --color-gold-100: #fef3c7;
-  --color-gold-200: #fde68a;
-  --color-gold-300: #fcd34d;
-  --color-gold-400: #fbbf24;
-  --color-gold-500: #f59e0b;
-  --color-gold-600: #d97706;
-  --color-gold-700: #b45309;
-  --color-gold-800: #92400e;
-  --color-gold-900: #78350f;
+  /* Accent — vert du logo (#34AE85) — liens, highlights, CTA */
+  --color-gold-50: #f0fdf7;
+  --color-gold-100: #dcf8eb;
+  --color-gold-200: #bcf0d9;
+  --color-gold-300: #8ae3c1;
+  --color-gold-400: #51cfa2;
+  --color-gold-500: #34ae85;
+  --color-gold-600: #248d6a;
+  --color-gold-700: #1f7158;
+  --color-gold-800: #1c5a48;
+  --color-gold-900: #184a3c;
+
+  /* Alias orange -> bleu du logo (Tailwind par défaut) */
+  --color-orange-50: #f0f9ff;
+  --color-orange-100: #e0f4fd;
+  --color-orange-200: #b8e8fb;
+  --color-orange-300: #79d4f6;
+  --color-orange-400: #3ab9ec;
+  --color-orange-500: #128fc9;
+  --color-orange-600: #0d78ad;
+  --color-orange-700: #0e628d;
+  --color-orange-800: #105274;
+  --color-orange-900: #114361;
+  --color-orange-950: #0a2b42;
+
+  /* Alias amber -> vert du logo (Tailwind par défaut) */
+  --color-amber-50: #f0fdf7;
+  --color-amber-100: #dcf8eb;
+  --color-amber-200: #bcf0d9;
+  --color-amber-300: #8ae3c1;
+  --color-amber-400: #51cfa2;
+  --color-amber-500: #34ae85;
+  --color-amber-600: #248d6a;
+  --color-amber-700: #1f7158;
+  --color-amber-800: #1c5a48;
+  --color-amber-900: #184a3c;
+  --color-amber-950: #0b2921;
 
   --animate-fade-in: fade-in 0.3s ease-out;
   --animate-scale-up: scale-up 0.25s ease-out;

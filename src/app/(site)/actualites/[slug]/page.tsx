@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 import { CTABand } from "@/components/site/sections";
 import { Icon } from "@/components/site/icons";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function ArticlePage(props: PageProps<"/actualites/[slug]">) {
   const { slug } = await props.params;

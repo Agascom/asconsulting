@@ -5,6 +5,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Politique de confidentialité",
+  robots: { index: false, follow: false },
 };
 
 export default function ConfidentialitePage() {

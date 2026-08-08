@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { PageHeader, CTABand } from "@/components/site/sections";
 import { Icon } from "@/components/site/icons";
 import type { IconName } from "@/components/site/icons";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function ServiceDetailPage(props: PageProps<"/services/[slug]">) {
   const { slug } = await props.params;

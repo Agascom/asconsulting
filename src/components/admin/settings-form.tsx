@@ -64,7 +64,7 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
         <input name="phone" defaultValue={initial.phone} className={inputClass} placeholder="+241 04 00 00 00" />
       </Field>
       <Field label="E-mail">
-        <input name="email" type="email" defaultValue={initial.email} className={inputClass} placeholder="contact@as-consulting.ga" />
+        <input name="email" type="email" defaultValue={initial.email} className={inputClass} placeholder="asconsulting.ga@gmail.com" />
       </Field>
       <Field label="Adresse">
         <input name="address" defaultValue={initial.address} className={inputClass} placeholder="Boulevard du bord de mer, Libreville" />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { COMPANY_INFO } from "@/lib/portal-data";
 import { usePortalUi } from "@/components/portal/portal-ui";
+import { WhatsAppIcon } from "@/components/site/whatsapp-button";
 import {
   MapPin,
   Phone,
@@ -30,6 +31,13 @@ export function LocationContact() {
 
   const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     COMPANY_INFO.googleMapsQuery
+  )}`;
+
+  const whatsappUrl = `https://wa.me/${COMPANY_INFO.whatsapp.replace(
+    /[^\d]/g,
+    ""
+  )}?text=${encodeURIComponent(
+    "Bonjour A&S CONSULTING, je souhaite prendre rendez-vous / des informations."
   )}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -116,13 +124,25 @@ export function LocationContact() {
                 </div>
                 <div>
                   <span className="text-slate-400 block text-[10px]">
-                    Téléphone & WhatsApp :
+                    Téléphone :
                   </span>
-                  <span className="font-bold text-white">
-                    {COMPANY_INFO.phonePrimary} / {COMPANY_INFO.phoneSecondary}
-                  </span>
+                  <a href="tel:+241077579908" className="font-bold text-white hover:text-orange-300">
+                    {COMPANY_INFO.phonePrimary}
+                  </a>
+                  <span className="text-slate-400"> / </span>
+                  <span className="font-bold text-white">{COMPANY_INFO.phoneSecondary}</span>
                 </div>
               </div>
+
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-xs font-extrabold text-white shadow-lg transition-all hover:scale-[1.02]"
+              >
+                <WhatsAppIcon className="h-5 w-5" />
+                <span>Discuter sur WhatsApp</span>
+              </a>
 
               <div className="flex items-center gap-3">
                 <div className="p-2.5 bg-slate-950 rounded-xl text-orange-400 border border-slate-800">
@@ -130,7 +150,9 @@ export function LocationContact() {
                 </div>
                 <div>
                   <span className="text-slate-400 block text-[10px]">Adresse E-mail :</span>
-                  <span className="font-bold text-white">{COMPANY_INFO.email}</span>
+                  <a href={`mailto:${COMPANY_INFO.email}`} className="font-bold text-white hover:text-orange-300">
+                    {COMPANY_INFO.email}
+                  </a>
                 </div>
               </div>
 
@@ -163,6 +185,15 @@ export function LocationContact() {
               <UserCheck className="w-4 h-4" />
               <span>Prendre RDV Express avec un Expert</span>
             </button>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 bg-[#25D366] hover:bg-[#1eb85a] text-white rounded-xl font-extrabold transition-all flex items-center justify-center gap-2"
+            >
+              <WhatsAppIcon className="w-4 h-4" />
+              <span>Contacter le Cabinet sur WhatsApp</span>
+            </a>
           </div>
         </div>
 
