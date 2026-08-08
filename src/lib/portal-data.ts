@@ -195,7 +195,7 @@ export const CORE_SERVICES: ServiceDetail[] = [
       "Du projet d'idée à l'immatriculation officielle, nous guidons les créateurs d'entreprise à chaque étape. Nous vous conseillons sur la forme juridique idéale (SARL, SUARL, EI, SAS) et effectuons toutes les démarches auprès du Guichet Unique de la Création d'Entreprise.",
     iconName: "Building2",
     tag: "Lancement",
-    image: "/images/directeur.jpeg",
+    image: "/images/directeur 2.jpeg",
     subtitle: "Du Projet à l'Immatriculation",
     features: [
       "Conseil sur le choix de la forme juridique (SARL, SAS, SUARL, EI)",

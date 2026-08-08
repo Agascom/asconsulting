@@ -17,7 +17,7 @@ import {
   FileCheck,
 } from "lucide-react";
 
-const heroImage = "/images/as-consulting-hero.jpg";
+const heroImage = "/images/home.jpeg";
 
 function getIcon(iconName: string) {
   switch (iconName) {

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePortalNavigation, usePortalUi } from "@/components/portal/portal-ui";
 import { ShieldCheck, Target, Award, CheckCircle2, ArrowRight } from "lucide-react";
 
-const officeImg = "/images/as-consulting-office.jpg";
+const officeImg = "/images/home1.jpeg";
 
 export function AboutPage() {
   const handleNavigate = usePortalNavigation();
