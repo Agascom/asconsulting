@@ -3,10 +3,8 @@ export type PageTab =
   | "about"
   | "services"
   | "creation"
-  | "simulator"
-  | "location"
-  | "resources"
   | "client-space"
+  | "location"
   | "contact";
 
 export interface ServiceDetail {
@@ -16,9 +14,29 @@ export interface ServiceDetail {
   fullDesc: string;
   iconName: string;
   tag: string;
+  image: string;
+  subtitle: string;
+  features: string[];
   benefits: string[];
   deliverables: string[];
   targetAudience: string[];
+}
+
+export interface ClientDocument {
+  id: string;
+  title: string;
+  category: "Fiscal" | "Comptable" | "Social" | "Juridique";
+  date: string;
+  size: string;
+  fileType: string;
+}
+
+export interface TaxCalendarTask {
+  id: string;
+  task: string;
+  deadline: string;
+  category: "TVA" | "CNSS" | "Acompte IS" | "Bilan";
+  status: "Effectué" | "En cours" | "A venir";
 }
 
 export interface LegalFormInfo {
@@ -84,6 +102,14 @@ export const CORE_SERVICES: ServiceDetail[] = [
       "Nous assurons la tenue intégrale ou partagée de votre comptabilité. De la saisie des pièces comptables au dressement des états financiers annuels (bilan, compte de résultat, annexes), nous offrons un suivi précis permettant de piloter votre entreprise en toute sérénité.",
     iconName: "Calculator",
     tag: "Incontournable",
+    image: "/images/comptable1.jpeg",
+    subtitle: "Conformité SYSCOHADA & Rigorisme",
+    features: [
+      "Tenue régulière des journaux comptables (Ventes, Achats, Banque)",
+      "Établissement des bilans annuels & compte de résultat SYSCOHADA",
+      "Révision comptable et vérification des pièces justificatives",
+      "Conseil en gestion de trésorerie et tableaux de bord financiers",
+    ],
     benefits: [
       "Conformité totale avec le Système Comptable SYSCOHADA révisé",
       "Visibilité financière claire grâce à des tableaux de bord périodiques",
@@ -107,6 +133,14 @@ export const CORE_SERVICES: ServiceDetail[] = [
       "Les formalités administratives et fiscales peuvent être complexes et chronophages. A&S CONSULTING prend en charge l'ensemble de vos obligations déclaratives (IS, IRPP, TVA, CSS, etc.) pour vous éviter tout risque de redressement et pénalités.",
     iconName: "FileCheck",
     tag: "Sérénité Fiscale",
+    image: "/images/comptable 2.jpeg",
+    subtitle: "Sérénité Juridique & Fiscale",
+    features: [
+      "Déclarations mensuelles de TVA & retenues à la source",
+      "Calcul et télédéclaration de l'Impôt sur les Sociétés (IS) & IRPP",
+      "Demande et suivi de l'obtention du Quitus Fiscal",
+      "Assistance et accompagnement lors des contrôles fiscaux",
+    ],
     benefits: [
       "Optimisation fiscale légale pour réduire vos charges",
       "Anticipation et respect strict des échéances déclaratives",
@@ -130,6 +164,14 @@ export const CORE_SERVICES: ServiceDetail[] = [
       "Un accompagnement RH et social structuré pour gérer votre capital humain. Nous gérons la paie de vos salariés, le calcul des cotisations sociales, les formalités d'embauche ainsi que la rédaction des contrats conformément au Code du Travail.",
     iconName: "Users",
     tag: "Ressources Humaines",
+    image: "/images/equipe.jpeg",
+    subtitle: "Règlement des Salaires & CNSS/CNAMGS",
+    features: [
+      "Établissement des bulletins de paie et fiches individuelles",
+      "Calcul des cotisations sociales CNSS et prestations CNAMGS",
+      "Rédaction des contrats de travail et avenants légaux",
+      "Gestion des déclarations d'embauche, départs et soldes de tout compte",
+    ],
     benefits: [
       "Émission rapide et sans erreur des bulletins de paie",
       "Gestion conforme des déclarations d'organismes sociaux (CNSS, CNAMGS)",
@@ -153,6 +195,14 @@ export const CORE_SERVICES: ServiceDetail[] = [
       "Du projet d'idée à l'immatriculation officielle, nous guidons les créateurs d'entreprise à chaque étape. Nous vous conseillons sur la forme juridique idéale (SARL, SUARL, EI, SAS) et effectuons toutes les démarches auprès du Guichet Unique de la Création d'Entreprise.",
     iconName: "Building2",
     tag: "Lancement",
+    image: "/images/directeur.jpeg",
+    subtitle: "Du Projet à l'Immatriculation",
+    features: [
+      "Conseil sur le choix de la forme juridique (SARL, SAS, SUARL, EI)",
+      "Rédaction personnalisée des statuts et actes constitutifs",
+      "Obtention du numéro NIF (Numéro d'Identification Fiscale) & RCCM",
+      "Montage du dossier bancaire et déblocage du capital social",
+    ],
     benefits: [
       "Conseil sur mesure pour le choix de la structure juridique et fiscale",
       "Rédaction sur mesure de vos statuts et actes constitutifs",
@@ -310,6 +360,65 @@ export const FISCAL_RESOURCES: FiscalResource[] = [
       "Mise à jour automatique selon les nouvelles barèmes cotisables.",
       "Télé-déclarations sociales sécurisées.",
     ],
+  },
+];
+
+export const CLIENT_DOCUMENTS: ClientDocument[] = [
+  {
+    id: "1",
+    title: "Quitus_Fiscal_Certifie_Aout_2026.pdf",
+    category: "Fiscal",
+    date: "02/08/2026",
+    size: "1.2 MB",
+    fileType: "PDF",
+  },
+  {
+    id: "2",
+    title: "Liasse_Fiscale_Etats_Financiers_SYSCOHADA_2025.pdf",
+    category: "Comptable",
+    date: "15/05/2026",
+    size: "4.8 MB",
+    fileType: "PDF",
+  },
+  {
+    id: "3",
+    title: "Bordereau_Cotisations_CNSS_CNAMGS_Q2_2026.pdf",
+    category: "Social",
+    date: "20/07/2026",
+    size: "890 KB",
+    fileType: "PDF",
+  },
+  {
+    id: "4",
+    title: "Statuts_Entreprise_Registre_RCCM_NIF.pdf",
+    category: "Juridique",
+    date: "10/01/2026",
+    size: "2.5 MB",
+    fileType: "PDF",
+  },
+];
+
+export const TAX_CALENDAR: TaxCalendarTask[] = [
+  {
+    id: "1",
+    task: "Déclaration & Téléversement TVA Mensuelle",
+    deadline: "15 Août 2026",
+    category: "TVA",
+    status: "Effectué",
+  },
+  {
+    id: "2",
+    task: "Paiement Cotisations Sociales CNSS / CNAMGS Paie Juillet",
+    deadline: "25 Août 2026",
+    category: "CNSS",
+    status: "En cours",
+  },
+  {
+    id: "3",
+    task: "Acompte Provisionnel Impôt sur les Sociétés (IS)",
+    deadline: "15 Septembre 2026",
+    category: "Acompte IS",
+    status: "A venir",
   },
 ];
 

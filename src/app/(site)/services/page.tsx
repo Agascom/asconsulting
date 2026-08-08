@@ -1,13 +1,7 @@
 "use client";
 
-import { ServicesSection } from "@/components/portal/services-section";
-import { usePortalNavigation, usePortalUi } from "@/components/portal/portal-ui";
+import { ServicesPage } from "@/components/portal/services-page";
 
-export default function ServicesPage() {
-  const handleNavigate = usePortalNavigation();
-  const { openAppointment } = usePortalUi();
-
-  return (
-    <ServicesSection onNavigate={handleNavigate} onOpenAppointment={openAppointment} />
-  );
+export default function ServicesRoute() {
+  return <ServicesPage />;
 }

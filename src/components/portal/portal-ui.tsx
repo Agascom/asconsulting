@@ -15,13 +15,11 @@ const PortalUiContext = createContext<PortalUiContextValue | null>(null);
 
 const TAB_ROUTES: Record<PageTab, string> = {
   home: "/",
-  about: "/#a-propos",
+  about: "/a-propos",
   services: "/services",
   creation: "/creation-entreprise",
-  simulator: "/simulateur-devis",
-  location: "/contact",
-  resources: "/guides-fiscaux",
   "client-space": "/espace-client",
+  location: "/contact",
   contact: "/contact",
 };
 

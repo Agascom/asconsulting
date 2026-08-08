@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { PageTab } from "@/lib/portal-data";
-import { CORE_SERVICES, LEGAL_FORMS, FREQUENT_FAQS } from "@/lib/portal-data";
+import { CORE_SERVICES, LEGAL_FORMS } from "@/lib/portal-data";
 import { Search, X, ArrowRight, FileText } from "lucide-react";
 
 interface GlobalSearchModalProps {
@@ -86,18 +86,11 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
       f.fullName.toLowerCase().includes(normalizedQuery)
   );
 
-  const matchingFaqs = FREQUENT_FAQS.filter(
-    (faq) =>
-      faq.q.toLowerCase().includes(normalizedQuery) ||
-      faq.a.toLowerCase().includes(normalizedQuery)
-  );
-
   const hasAnyMatch =
     matchingServices.length > 0 ||
     matchingPosts.length > 0 ||
     matchingPortalServices.length > 0 ||
-    matchingForms.length > 0 ||
-    matchingFaqs.length > 0;
+    matchingForms.length > 0;
 
   const handleSelectTab = (tab: PageTab) => {
     onNavigate(tab);
@@ -143,7 +136,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
                 {[
                   { label: "Création SARL / SUARL", tab: "creation" as PageTab },
                   { label: "Quitus Fiscal & TVA", tab: "services" as PageTab },
-                  { label: "Simulateur de Devis", tab: "simulator" as PageTab },
+                  { label: "Portail Client & Pièces", tab: "client-space" as PageTab },
                   { label: "Localisation Gare Routière", tab: "location" as PageTab },
                   { label: "Bulletins de Paie CNSS", tab: "services" as PageTab },
                 ].map((item, i) => (
@@ -258,27 +251,6 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }: GlobalSearchM
                           <div className="text-[11px] text-slate-500">{f.recommendedFor}</div>
                         </div>
                         <ArrowRight className="h-4 w-4 shrink-0 text-emerald-700" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* FAQ matches */}
-              {matchingFaqs.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                    Réponses & FAQs
-                  </h4>
-                  <div className="space-y-2">
-                    {matchingFaqs.map((faq, i) => (
-                      <div
-                        key={i}
-                        onClick={() => handleSelectTab("resources")}
-                        className="cursor-pointer rounded-xl border border-slate-200 bg-slate-50 p-3 hover:bg-emerald-50"
-                      >
-                        <div className="text-xs font-bold text-slate-900">{faq.q}</div>
-                        <div className="mt-1 line-clamp-2 text-[11px] text-slate-500">{faq.a}</div>
                       </div>
                     ))}
                   </div>

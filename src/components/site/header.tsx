@@ -8,28 +8,23 @@ import { COMPANY_INFO } from "@/lib/portal-data";
 import { usePortalUi } from "@/components/portal/portal-ui";
 import {
   Phone,
-  Mail,
   MapPin,
-  Clock,
   Search,
   Calendar,
   Menu,
   X,
   UserCheck,
-  ChevronRight,
+  ArrowRight,
   ShieldCheck,
-  Building2,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { id: "home", label: "Accueil", href: "/" },
-  { id: "about", label: "À propos", href: "/#a-propos" },
+  { id: "about", label: "À Propos", href: "/a-propos" },
   { id: "services", label: "Nos Expertises", href: "/services" },
   { id: "creation", label: "Création d'Entreprise", href: "/creation-entreprise" },
-  { id: "simulator", label: "Simulateur Devis", href: "/simulateur-devis" },
-  { id: "resources", label: "Guides & Fiscalité", href: "/guides-fiscaux" },
-  { id: "client-space", label: "Espace Client", href: "/espace-client" },
-  { id: "contact", label: "Contact", href: "/contact" },
+  { id: "client-space", label: "Portail Client", href: "/espace-client" },
+  { id: "location", label: "Localisation & Contact", href: "/contact" },
 ];
 
 export function Header() {
@@ -40,171 +35,145 @@ export function Header() {
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     if (href === "/contact") return pathname === "/contact";
-    if (href.startsWith("/#")) return pathname === "/";
     return pathname === href || pathname.startsWith(href + "/");
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-md">
-      {/* Top Utility Bar */}
-      <div className="border-b border-emerald-800 bg-emerald-950 py-2 px-4 text-xs text-slate-200">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-4 text-slate-300">
-            <a
-              href={`tel:${COMPANY_INFO.phonePrimary.replace(/\s/g, "")}`}
-              className="flex items-center gap-1.5 transition-colors hover:text-emerald-300"
-            >
-              <Phone className="h-3.5 w-3.5 text-amber-400" />
-              <span>{COMPANY_INFO.phonePrimary}</span>
-            </a>
-            <a
-              href={`mailto:${COMPANY_INFO.email}`}
-              className="hidden items-center gap-1.5 transition-colors hover:text-emerald-300 sm:flex"
-            >
-              <Mail className="h-3.5 w-3.5 text-amber-400" />
-              <span>{COMPANY_INFO.email}</span>
-            </a>
-            <div className="flex items-center gap-1.5 text-emerald-200">
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-amber-400" />
-              <span className="max-w-[280px] truncate sm:max-w-none">
-                {COMPANY_INFO.addressLine1} ({COMPANY_INFO.addressLine2})
-              </span>
-            </div>
-          </div>
+    <header className="fixed top-0 left-0 right-0 z-50 pt-3 px-3 sm:px-6 max-w-7xl mx-auto">
+      {/* Top micro bar for fast contact & location */}
+      <div className="hidden lg:flex items-center justify-between px-6 py-1 bg-slate-950/90 backdrop-blur-md rounded-t-2xl border-t border-x border-white/10 text-[11px] text-slate-300">
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-1 text-orange-400 font-bold">
+            <MapPin className="w-3.5 h-3.5 text-orange-500" />
+            <span>
+              {COMPANY_INFO.addressLine1} ({COMPANY_INFO.addressLine2})
+            </span>
+          </span>
+          <span className="text-slate-500">|</span>
+          <a
+            href={`tel:${COMPANY_INFO.phonePrimary.replace(/\s/g, "")}`}
+            className="flex items-center gap-1 text-slate-300 transition-colors hover:text-orange-300"
+          >
+            <Phone className="w-3.5 h-3.5 text-orange-500" />
+            <span>{COMPANY_INFO.phonePrimary}</span>
+          </a>
+        </div>
 
-          <div className="ml-auto flex items-center gap-3">
-            <div className="hidden items-center gap-1.5 border-r border-emerald-800 pr-3 text-slate-300 lg:flex">
-              <Clock className="h-3.5 w-3.5 text-amber-400" />
-              <span>{COMPANY_INFO.workingHours}</span>
-            </div>
-
-            <Link
-              href="/espace-client"
-              className="inline-flex items-center gap-1.5 rounded border border-emerald-700 bg-emerald-800 px-2.5 py-1 text-xs font-medium text-amber-300 transition-colors hover:bg-emerald-700"
-            >
-              <UserCheck className="h-3.5 w-3.5" />
-              <span>Espace Client</span>
-            </Link>
-          </div>
+        <div className="flex items-center gap-3 font-semibold text-orange-300">
+          <ShieldCheck className="w-3.5 h-3.5 text-orange-500 inline" />
+          <span>Cabinet Agréé • Expertises Comptables & Fiscale</span>
         </div>
       </div>
 
-      {/* Main Navigation Header */}
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+      {/* Main Glass Navigation Bar */}
+      <nav className="bg-slate-900/90 backdrop-blur-xl border border-white/15 rounded-full px-5 py-2.5 flex items-center justify-between text-white shadow-2xl">
         {/* Brand Logo */}
-        <Link href="/" className="group flex cursor-pointer items-center gap-3">
-          <div className="relative h-16 w-16 shrink-0 overflow-hidden transition-transform group-hover:scale-105">
+        <Link href="/" className="flex items-center gap-2.5 cursor-pointer group">
+          <div className="relative w-10 h-10 shrink-0 overflow-hidden rounded-full bg-white/10 border border-white/20">
             <Image
               src="/images/logo.png"
               alt="Logo A&S CONSULTING"
               fill
-              sizes="64px"
+              sizes="40px"
               className="object-contain"
               priority
             />
           </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-serif text-xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-emerald-800">
-                A&S CONSULTING
-              </span>
-              <ShieldCheck className="inline h-4 w-4 text-emerald-600" />
-            </div>
-            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
-              Comptabilité • Fiscalité • Création
-            </p>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white leading-none font-sans">
+              A&S <span className="text-orange-500">CONSULTING</span>
+            </span>
+            <span className="text-[9px] text-slate-400 font-semibold tracking-wider uppercase mt-0.5">
+              Comptabilité • Fiscalité • Juridique
+            </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-1 xl:flex">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={`whitespace-nowrap rounded-md px-2.5 py-2 text-xs font-semibold transition-all ${
-                isActive(item.href)
-                  ? "bg-emerald-900 text-amber-300 shadow-sm"
-                  : "text-slate-700 hover:bg-emerald-50 hover:text-emerald-900"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {/* Desktop Links */}
+        <div className="hidden lg:flex items-center gap-1 text-xs font-bold text-slate-300">
+          {NAV_ITEMS.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`transition-all py-1 px-2.5 rounded-full ${
+                  active
+                    ? "bg-orange-500 text-white font-black shadow-md shadow-orange-500/30"
+                    : "hover:text-orange-400 hover:bg-white/5"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2.5">
-          {/* Global Search Button */}
+        <div className="hidden sm:flex items-center gap-2">
+          {/* Global Search */}
           <button
             onClick={openSearch}
-            title="Rechercher une expertise ou un guide"
+            title="Rechercher une expertise"
             aria-label="Rechercher"
-            className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-emerald-900"
+            className="p-2 rounded-full text-slate-300 border border-white/15 bg-white/5 transition-colors hover:bg-orange-500 hover:text-white"
           >
-            <Search className="h-5 w-5" />
+            <Search className="w-4 h-4" />
           </button>
 
-          {/* Primary CTA: Appointment */}
+          {/* Primary CTA: RDV */}
           <button
             onClick={openAppointment}
-            className="hidden items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-amber-600 hover:shadow active:translate-y-0 sm:inline-flex"
+            className="flex items-center gap-2 pl-4 pr-1.5 py-1.5 bg-orange-500/10 hover:bg-orange-500 text-white border border-orange-500/40 rounded-full font-extrabold text-xs transition-all hover:scale-105 active:scale-95 group"
           >
-            <Calendar className="h-4 w-4" />
+            <Calendar className="w-3.5 h-3.5 text-orange-400 group-hover:text-white" />
             <span>Prendre RDV</span>
-          </button>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menu"
-            className="rounded-lg p-2 text-slate-700 transition-colors hover:bg-slate-100 xl:hidden"
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <div className="w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center group-hover:bg-slate-950 transition-colors">
+              <ArrowRight className="w-3 h-3" />
+            </div>
           </button>
         </div>
-      </div>
 
-      {/* Mobile Drawer Navigation */}
+        {/* Mobile Toggle Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Menu"
+          className="lg:hidden p-2 rounded-full bg-white/10 text-white border border-white/20 focus:outline-none sm:hidden"
+        >
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </nav>
+
+      {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="space-y-2 border-t border-slate-800 bg-slate-900 px-4 py-4 text-white shadow-2xl xl:hidden animate-fade-in">
-          <div className="mb-3 space-y-1 rounded-lg border border-emerald-800 bg-emerald-950/80 p-3 text-xs text-slate-300">
-            <p className="flex items-center gap-1.5 font-semibold text-amber-300">
-              <Building2 className="h-4 w-4" /> Cabinet A&S CONSULTING
-            </p>
-            <p className="text-[11px] text-slate-300">
-              {COMPANY_INFO.addressLine1} ({COMPANY_INFO.addressLine2})
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-1">
+        <div className="lg:hidden mt-2 bg-slate-950/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 text-white space-y-3 shadow-2xl animate-fade-in">
+          <div className="flex flex-col gap-2 font-extrabold text-xs">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.id}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex w-full items-center justify-between rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors ${
+                className={`text-left py-2.5 px-4 rounded-2xl transition-colors flex items-center justify-between ${
                   isActive(item.href)
-                    ? "bg-amber-500 font-bold text-slate-950"
-                    : "text-slate-200 hover:bg-slate-800"
+                    ? "bg-orange-500 text-white font-black"
+                    : "text-slate-300 hover:bg-white/5 hover:text-orange-400"
                 }`}
               >
                 <span>{item.label}</span>
-                <ChevronRight className="h-4 w-4 opacity-70" />
+                {isActive(item.href) && <ArrowRight className="w-4 h-4" />}
               </Link>
             ))}
-          </div>
 
-          <div className="flex flex-col gap-2 border-t border-slate-800 pt-3">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 openAppointment();
               }}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 py-2.5 text-sm font-bold text-slate-950 shadow hover:bg-amber-600"
+              className="w-full mt-3 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-black rounded-2xl flex items-center justify-center gap-2 shadow-lg"
             >
-              <Calendar className="h-4 w-4" />
-              <span>Prendre un Rendez-vous</span>
+              <UserCheck className="w-4 h-4" />
+              <span>Demander un Rendez-vous</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>

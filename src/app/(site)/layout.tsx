@@ -5,9 +5,11 @@ import { PortalUiProvider } from "@/components/portal/portal-ui";
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <PortalUiProvider>
-      <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
+      <div className="flex min-h-screen flex-col bg-slate-950 font-sans text-white">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
     </PortalUiProvider>
   );
 }

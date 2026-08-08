@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { LEGAL_FORMS } from "@/lib/portal-data";
 import {
+  Briefcase,
   CheckCircle2,
   Clock,
-  Sparkles,
-  ArrowRight,
-  FolderCheck,
+  UserCheck,
+  Send,
+  ShieldCheck,
 } from "lucide-react";
 
 interface CompanyCreationModuleProps {
@@ -15,246 +16,264 @@ interface CompanyCreationModuleProps {
 }
 
 export function CompanyCreationModule({ onOpenAppointment }: CompanyCreationModuleProps) {
-  const [selectedForm, setSelectedForm] = useState(LEGAL_FORMS[0]);
-  const [checkedDocs, setCheckedDocs] = useState<{ [key: string]: boolean }>({
-    identity: true,
-    photo: true,
-    lease: false,
-    statutes: false,
-    capital: false,
-    map: false,
-  });
+  const [selectedFormCode, setSelectedFormCode] = useState(LEGAL_FORMS[0].code);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const toggleDoc = (key: string) => {
-    setCheckedDocs((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  const [projectName, setProjectName] = useState("");
+  const [managerName, setManagerName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
+  const activeForm =
+    LEGAL_FORMS.find((f) => f.code === selectedFormCode) || LEGAL_FORMS[0];
 
   const steps = [
     {
-      num: "01",
-      title: "Consultation & Choix du Statut",
-      desc: "Analyse de votre projet pour sélectionner la meilleure forme juridique (SUARL, SARL, EI, SAS) et fiscale.",
+      step: "01",
+      title: "Choix de la Forme Juridique",
+      desc: "Orientation stratégique entre SUARL, SARL, Entreprise Individuelle ou SAS selon vos objectifs.",
     },
     {
-      num: "02",
-      title: "Rédaction des Actes & Statuts",
-      desc: "Établissement sur mesure des statuts, du procès-verbal constitutif et de la déclaration de souscription.",
+      step: "02",
+      title: "Rédaction des Statuts",
+      desc: "Confection personnalisée des statuts, procès-verbaux d'assemblée et déclarations de souscription.",
     },
     {
-      num: "03",
-      title: "Dépôt au Guichet Unique (GUAN)",
-      desc: "Prise en charge intégrale auprès des administrations pour l'obtention du RCCM et du Numéro NIF.",
+      step: "03",
+      title: "Démarches Guichet Unique & Banque",
+      desc: "Dépôt du capital social en compte bloqué, attestation bancaire et formalités au guichet unique (GUAN).",
     },
     {
-      num: "04",
-      title: "Remise du Dossier & Démarrage",
-      desc: "Livraison de votre dossier officiel, aide à l'ouverture de compte bancaire professionnel et affiliations.",
+      step: "04",
+      title: "Obtention NIF & RCCM",
+      desc: "Délivrance de votre Numéro d'Identification Fiscale (NIF) et du Registre du Commerce (RCCM).",
     },
   ];
 
-  const docs = [
-    { id: "identity", label: "Copie de la pièce d'identité du gérant (CNI ou Passeport)" },
-    { id: "photo", label: "2 photos d'identité récentes fond blanc" },
-    { id: "lease", label: "Contrat de bail commercial ou attestation de domiciliation" },
-    { id: "statutes", label: "Projet d'activité / Objet social de l'entreprise" },
-    { id: "capital", label: "Attestation de dépôt du capital social (si applicable)" },
-    { id: "map", label: "Plan de localisation du siège social" },
-  ];
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormSubmitted(true);
+  };
 
   return (
-    <section id="creation" className="border-b border-slate-200 bg-slate-50 py-16">
-      <div className="mx-auto max-w-7xl space-y-12 px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mx-auto max-w-3xl space-y-3 text-center">
-          <span className="inline-block rounded-full border border-amber-200 bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-800">
-            Création d'Entreprise Simplifiée
-          </span>
-          <h2 className="font-serif text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-            Lancez Votre Société avec un Accompagnement Intégral
+    <div className="pt-32 pb-20 px-4 sm:px-8 lg:px-12 bg-slate-950 text-white min-h-screen space-y-16">
+      {/* Page Header */}
+      <div className="max-w-7xl mx-auto space-y-4 text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-extrabold border border-orange-500/30 uppercase tracking-widest">
+          <Briefcase className="w-4 h-4 text-orange-500" /> Guichet Création d'Entreprise Clé en
+          Main
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          Passez de l'Idée à <span className="text-orange-500">l'Immatriculation</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Nous vous guidons à chaque étape du processus de création de votre société au Gabon, du
+          montage du dossier jusqu'à l'enregistrement définitif (NIF & RCCM).
+        </p>
+      </div>
+
+      {/* 4 Steps Timeline */}
+      <div className="max-w-7xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+        <h2 className="text-xl sm:text-3xl font-black text-white text-center">
+          Le Processus de Création en 4 Étapes
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {steps.map((st) => (
+            <div
+              key={st.step}
+              className="bg-slate-950 p-6 rounded-2xl border border-slate-800 relative space-y-3"
+            >
+              <div className="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 font-black text-sm flex items-center justify-center border border-orange-500/30">
+                {st.step}
+              </div>
+              <h3 className="font-extrabold text-sm text-white">{st.title}</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">{st.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Legal Forms Comparison */}
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="text-center max-w-xl mx-auto space-y-2">
+          <h2 className="text-2xl sm:text-4xl font-black text-white">
+            Quelle Forme Juridique Choisir ?
           </h2>
-          <p className="text-sm leading-relaxed text-slate-600 sm:text-base">
-            De la rédaction des statuts jusqu'à l'enregistrement officiel au Registre du Commerce
-            (RCCM) et l'attribution du NIF, A&S CONSULTING vous décharge de toutes les procédures
-            complexes.
+          <p className="text-xs text-slate-400">
+            Découvrez les caractéristiques principales des structures d'entreprise au Gabon.
           </p>
         </div>
 
-        {/* Legal Form Selector Tabs */}
-        <div className="space-y-6">
-          <h3 className="text-center font-serif text-xl font-bold text-slate-900">
-            Comparez et Choisissez la Forme Juridique Adaptée
-          </h3>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {LEGAL_FORMS.map((form) => {
-              const isSelected = form.code === selectedForm.code;
-              return (
-                <button
-                  key={form.code}
-                  onClick={() => setSelectedForm(form)}
-                  className={`rounded-xl border p-4 text-center font-serif text-sm font-bold transition-all ${
-                    isSelected
-                      ? "border-emerald-700 bg-emerald-900 text-amber-300 shadow-md"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-emerald-50"
-                  }`}
-                >
-                  <div className="text-base">{form.code}</div>
-                  <div className="mt-0.5 truncate font-sans text-xs font-normal opacity-90">
-                    {form.name}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Legal Form Detailed Card */}
-          <div className="grid grid-cols-1 gap-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-md sm:p-8 lg:grid-cols-12">
-            <div className="space-y-5 lg:col-span-8">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                  Forme Sélectionnée
-                </span>
-                <h4 className="font-serif text-2xl font-bold text-slate-900">
-                  {selectedForm.fullName} ({selectedForm.code})
-                </h4>
-                <p className="mt-1 text-xs text-slate-500">{selectedForm.recommendedFor}</p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                  <div className="text-[11px] font-semibold uppercase text-slate-500">Capital Requis</div>
-                  <div className="mt-0.5 text-xs font-bold text-slate-900">{selectedForm.minCapital}</div>
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                  <div className="text-[11px] font-semibold uppercase text-slate-500">Nombre d'Associés</div>
-                  <div className="mt-0.5 text-xs font-bold text-slate-900">{selectedForm.associates}</div>
-                </div>
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-                  <div className="flex items-center gap-1 text-[11px] font-semibold uppercase text-emerald-800">
-                    <Clock className="h-3.5 w-3.5" /> Délai Estimé
-                  </div>
-                  <div className="mt-0.5 text-xs font-bold text-emerald-950">{selectedForm.estimatedDelay}</div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <h5 className="text-xs font-bold uppercase text-slate-900">
-                  Avantages Majeurs du Statut
-                </h5>
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {selectedForm.advantages.map((adv, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-700">
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
-                      <span>{adv}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-between space-y-4 rounded-xl border border-slate-800 bg-slate-900 p-6 text-white lg:col-span-4">
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-1.5 rounded bg-amber-400 px-2.5 py-1 text-[11px] font-bold text-slate-950">
-                  <Sparkles className="h-3.5 w-3.5" /> Dossier Clé en Main
-                </div>
-                <h5 className="font-serif text-lg font-bold text-white">
-                  Prêt à immatriculer votre {selectedForm.code} ?
-                </h5>
-                <p className="text-xs leading-relaxed text-slate-300">
-                  Confiez la rédaction de vos statuts et l'enregistrement au Guichet Unique à nos
-                  spécialistes.
-                </p>
-              </div>
-
-              <div className="space-y-2 pt-2">
-                <button
-                  onClick={onOpenAppointment}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 py-3 text-xs font-bold text-slate-950 shadow transition-colors hover:bg-amber-600"
-                >
-                  <span>Créer ma {selectedForm.code}</span>
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="flex border-b border-slate-800 gap-3 justify-center overflow-x-auto pb-2">
+          {LEGAL_FORMS.map((form) => (
+            <button
+              key={form.code}
+              onClick={() => setSelectedFormCode(form.code)}
+              className={`px-6 py-3 rounded-2xl text-xs font-black transition-all whitespace-nowrap ${
+                selectedFormCode === form.code
+                  ? "bg-orange-500 text-white shadow-lg shadow-orange-500/30"
+                  : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
+              }`}
+            >
+              {form.code}
+            </button>
+          ))}
         </div>
 
-        {/* Roadmap Steps */}
-        <div className="space-y-6">
-          <div className="space-y-1 text-center">
-            <h3 className="font-serif text-2xl font-bold text-slate-900">
-              Le Processus d'Accompagnement en 4 Étapes Simple
-            </h3>
-            <p className="text-xs text-slate-500">
-              Un calendrier transparent pour le lancement de votre activité
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((st, idx) => (
-              <div key={idx} className="relative space-y-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-950 font-serif text-lg font-bold text-amber-400 shadow">
-                  {st.num}
-                </div>
-                <h4 className="font-serif text-sm font-bold text-slate-900">{st.title}</h4>
-                <p className="text-xs leading-relaxed text-slate-600">{st.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Interactive Required Documents Checklist for Entrepreneur */}
-        <div className="space-y-4 rounded-2xl border border-emerald-800 bg-emerald-950 p-6 text-white sm:p-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-800 pb-4">
-            <div>
-              <h4 className="flex items-center gap-2 font-serif text-xl font-bold text-amber-300">
-                <FolderCheck className="h-5 w-5" /> Liste des Pièces Généralement Requis
-              </h4>
-              <p className="mt-0.5 text-xs text-slate-300">
-                Cochez les éléments dont vous disposez déjà pour préparer votre premier rendez-vous
-                avec A&S CONSULTING
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-1">
+              <span className="text-xs font-black uppercase text-orange-400">
+                Code Structure : {activeForm.code}
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-black text-white">{activeForm.name}</h3>
+              <p className="text-xs text-slate-300">
+                Recommandé pour : <strong className="text-orange-400">{activeForm.recommendedFor}</strong>
               </p>
             </div>
-            <span className="rounded-full border border-emerald-700 bg-emerald-900 px-3 py-1 text-xs font-semibold text-amber-300">
-              Checklist Créateur
-            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-950 rounded-2xl border border-slate-800 text-xs">
+              <div>
+                <span className="text-slate-400 block text-[11px]">Capital Minimum :</span>
+                <span className="font-bold text-white">{activeForm.minCapital}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[11px]">Nombre d'Associés :</span>
+                <span className="font-bold text-white">{activeForm.associates}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                <span className="text-slate-400 text-[11px]">
+                  Délai : <strong className="text-white">{activeForm.estimatedDelay}</strong>
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="text-xs font-black uppercase text-orange-400">
+                Principaux Avantages :
+              </h4>
+              {activeForm.advantages.map((adv, idx) => (
+                <div key={idx} className="flex items-center gap-2 text-xs text-slate-200">
+                  <CheckCircle2 className="w-4 h-4 text-orange-500 shrink-0" />
+                  <span>{adv}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2 lg:grid-cols-3">
-            {docs.map((item) => (
-              <label
-                key={item.id}
-                onClick={() => toggleDoc(item.id)}
-                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-xs transition-colors ${
-                  checkedDocs[item.id]
-                    ? "border-amber-400 bg-emerald-900/90 font-medium text-amber-200"
-                    : "border-emerald-800 bg-slate-900/80 text-slate-300 hover:bg-slate-900"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={!!checkedDocs[item.id]}
-                  onChange={() => {}}
-                  className="mt-0.5 accent-amber-400"
-                />
-                <span>{item.label}</span>
-              </label>
-            ))}
-          </div>
+          {/* Creation Request Form */}
+          <div className="lg:col-span-5 bg-slate-950 p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h4 className="font-extrabold text-sm text-white flex items-center gap-2">
+              <UserCheck className="w-4 h-4 text-orange-500" />
+              <span>Demande d'Accompagnement Création</span>
+            </h4>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-            <span className="text-xs text-slate-300">
-              Il vous manque certaines pièces ? A&S CONSULTING vous aide à les constituer.
-            </span>
-            <button
-              onClick={onOpenAppointment}
-              className="rounded-lg bg-amber-500 px-5 py-2.5 text-xs font-bold text-slate-950 shadow transition-colors hover:bg-amber-600"
-            >
-              Prendre RDV avec un Conseiller
-            </button>
+            {formSubmitted ? (
+              <div className="p-6 bg-slate-900 rounded-2xl border border-slate-800 text-center space-y-3">
+                <div className="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center mx-auto font-bold">
+                  ✓
+                </div>
+                <h5 className="font-extrabold text-xs text-white">Dossier Initial Reçu</h5>
+                <p className="text-[11px] text-slate-300">
+                  Un juriste d'A&S CONSULTING prendra contact avec vous sous 24h pour finaliser le
+                  montage de vos statuts.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3 text-xs">
+                <div>
+                  <label className="text-[11px] text-slate-400 font-bold block mb-1">
+                    Nom de la future société :
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ex: Gabon Transit SARL"
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[11px] text-slate-400 font-bold block mb-1">
+                    Nom & Prénom du Dirigeant :
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ex: Jean-Paul Mba"
+                    value={managerName}
+                    onChange={(e) => setManagerName(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[11px] text-slate-400 font-bold block mb-1">
+                      Téléphone :
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="+241 77 ..."
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] text-slate-400 font-bold block mb-1">
+                      Email :
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="contact@..."
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-extrabold rounded-xl transition-all flex items-center justify-center gap-2 mt-2 shadow-lg"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Initier Mon Dossier De Création</span>
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Closing CTA */}
+      <div className="max-w-7xl mx-auto bg-gradient-to-r from-orange-500/15 to-amber-500/10 border border-orange-500/30 rounded-3xl p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="space-y-2 text-center sm:text-left">
+          <h2 className="text-2xl sm:text-3xl font-black text-white">
+            Prêt à Lancer Votre <span className="text-orange-500">Société</span> ?
+          </h2>
+          <p className="text-xs text-slate-300 max-w-xl">
+            Confiez-nous votre projet dès aujourd'hui : nos experts immatriculent votre structure en
+            3 à 7 jours ouvrés, en toute sécurité juridique.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button
+            onClick={onOpenAppointment}
+            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-xs rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>Prendre RDV avec un Conseiller</span>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
